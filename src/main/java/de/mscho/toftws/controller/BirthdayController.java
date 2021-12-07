@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping(path = "/birthday")
@@ -32,7 +34,12 @@ public class BirthdayController {
     }
 
     @GetMapping(path = "/all")
-    public @ResponseBody Iterable<Birthday> getAllBirthdays() {
-        return birthdayRepo.findAll();
+    public @ResponseBody String getAllBirthdays() {
+        Iterable<Birthday> birthdays = birthdayRepo.findAll();
+        StringBuilder bob = new StringBuilder("names: \n");
+
+        birthdays.forEach( bd -> bob.append(bd.getName()).append("\n"));
+
+        return bob.toString();
     }
 }
