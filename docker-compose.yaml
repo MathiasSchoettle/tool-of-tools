@@ -2,13 +2,9 @@ version: "3.8"
 
 services:
   app:
-    image: adoptopenjdk/openjdk11:ubi
-    command: java -jar app.jar
+    image: ghcr.io/mathiasschoettle/tooloftools:main
     ports:
       - "8080:8080"
-    working_dir: /app
-    volumes:
-      - ./target/toftws-0.0.1-SNAPSHOT.jar:/app/app.jar
     environment:
       MYSQL_HOST: mysql
       MYSQL_USER: root
