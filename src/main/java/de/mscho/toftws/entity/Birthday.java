@@ -1,17 +1,18 @@
 package de.mscho.toftws.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDate;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Birthday {
 
     @Id
@@ -19,11 +20,15 @@ public class Birthday {
     @JsonIgnore
     private Long id;
 
-    private Integer day;
+    private String firstname;
 
-    private Integer month;
+    private String surname;
 
-    private Integer year;
+    private LocalDate date;
 
-    private String name;
+    public Birthday(String firstname, String surname, LocalDate date) {
+        this.firstname = firstname;
+        this.surname = surname;
+        this.date = date;
+    }
 }

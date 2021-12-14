@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   app:
+    container_name: toft_app
     image: ghcr.io/mathiasschoettle/tooloftools:main
     ports:
       - "8080:8080"
@@ -12,7 +13,8 @@ services:
       MYSQL_DB: toft
 
   mysql:
-    image: mysql:8.0.27
+    container_name: toft_db
+    image: ubuntu/mysql
     ports:
       - "3306:3306"
     volumes:
