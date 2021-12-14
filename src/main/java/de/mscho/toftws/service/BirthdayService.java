@@ -8,6 +8,7 @@ import de.mscho.toftws.util.RegexUtil;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class BirthdayService {
@@ -26,5 +27,13 @@ public class BirthdayService {
         LocalDate date = LocalDate.parse(dateString, DateTimeUtil.DTF_YEAR_MONTH_DAY);
 
         return birthdayRepo.save(new Birthday(firstname, surname, date));
+    }
+
+    public List<Birthday> getBirthdays(String beginString, String endString) {
+
+        LocalDate begin = LocalDate.parse(beginString, DateTimeUtil.DTF_YEAR_MONTH_DAY);
+        LocalDate end = LocalDate.parse(endString, DateTimeUtil.DTF_YEAR_MONTH_DAY);
+
+        return birthdayRepo.findBirthdayByDateBetween(begin, end);
     }
 }

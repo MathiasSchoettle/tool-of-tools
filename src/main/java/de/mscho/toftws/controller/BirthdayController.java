@@ -34,9 +34,17 @@ public class BirthdayController {
             @RequestParam String firstname,
             @RequestParam String surname,
             @RequestParam String dateString)
-            throws NameFormatException {
-
+    {
         return birthdayService.addNewBirthday(firstname, surname, dateString);
+    }
+
+    @GetMapping(path = "/get")
+    @ResponseBody
+    public List<Birthday> getBirthdays(
+            @RequestParam String beginString,
+            @RequestParam String endString)
+    {
+        return birthdayService.getBirthdays(beginString, endString);
     }
 
 }
