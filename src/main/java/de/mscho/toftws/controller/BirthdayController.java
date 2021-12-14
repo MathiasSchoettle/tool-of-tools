@@ -41,8 +41,8 @@ public class BirthdayController {
     @GetMapping(path = "/get")
     @ResponseBody
     public List<Birthday> getBirthdays(
-            @RequestParam String beginString,
-            @RequestParam String endString)
+            @RequestParam(name = "begin") String beginString,
+            @RequestParam(name = "end") String endString)
     {
         return birthdayService.getBirthdays(beginString, endString);
     }
