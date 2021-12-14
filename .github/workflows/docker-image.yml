@@ -29,6 +29,17 @@ jobs:
           
       - name: build with maven
         run: mvn clean package --file pom.xml 
+    
+      - name: copy file via ssh key
+        uses: appleboy/scp-action@master
+        env:
+          HOST: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PORT: ${{ secrets.PORT }}
+          KEY: ${{ secrets.KEY }}
+        with:
+          source: "./target/*.jar"
+          target: "/target/"
         
       - name: Checkout repository
         uses: actions/checkout@v2
