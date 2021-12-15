@@ -29,11 +29,16 @@ public class BirthdayService {
         return birthdayRepo.save(new Birthday(firstname, surname, date));
     }
 
-    public List<Birthday> getBirthdays(String beginString, String endString) {
+    public List<Birthday> getBirthdaysBetween(String beginString, String endString) {
 
         LocalDate begin = LocalDate.parse(beginString, DateTimeUtil.DTF_YEAR_MONTH_DAY);
         LocalDate end = LocalDate.parse(endString, DateTimeUtil.DTF_YEAR_MONTH_DAY);
 
         return birthdayRepo.findBirthdayByDateBetween(begin, end);
+    }
+
+    public List<Birthday> getBirthdayFrom(String fromString) {
+        LocalDate from = LocalDate.parse(fromString, DateTimeUtil.DTF_YEAR_MONTH_DAY);
+        return birthdayRepo.findBirthdayByDate(from);
     }
 }

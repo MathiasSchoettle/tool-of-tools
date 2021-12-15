@@ -9,4 +9,6 @@ import java.util.List;
 public interface BirthdayRepo extends CrudRepository<Birthday, Long> {
 
     List<Birthday> findBirthdayByDateBetween(LocalDate begin, LocalDate end);
+
+    List<Birthday> findBirthdayByDate(LocalDate date);
 }
