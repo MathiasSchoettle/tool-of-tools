@@ -3,6 +3,7 @@ version: "3.8"
 services:
   app:
     container_name: toft_app
+    pull_policy: always
     image: ghcr.io/mathiasschoettle/tooloftools:main
     ports:
       - "8080:8080"

@@ -7,7 +7,12 @@ import de.mscho.toftws.util.DateTimeUtil;
 import de.mscho.toftws.util.RegexUtil;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.MonthDay;
+import java.time.temporal.TemporalField;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,20 +30,11 @@ public class BirthdayService {
             throw new NameFormatException(firstname, surname);
 
         LocalDate date = LocalDate.parse(dateString, DateTimeUtil.DTF_YEAR_MONTH_DAY);
-
         return birthdayRepo.save(new Birthday(firstname, surname, date));
     }
 
-    public List<Birthday> getBirthdaysBetween(String beginString, String endString) {
-
-        LocalDate begin = LocalDate.parse(beginString, DateTimeUtil.DTF_YEAR_MONTH_DAY);
-        LocalDate end = LocalDate.parse(endString, DateTimeUtil.DTF_YEAR_MONTH_DAY);
-
-        return birthdayRepo.findBirthdayByDateBetween(begin, end);
-    }
-
-    public List<Birthday> getBirthdayFrom(String fromString) {
+    public List<Birthday> getBirthdaysFrom(String fromString) {
         LocalDate from = LocalDate.parse(fromString, DateTimeUtil.DTF_YEAR_MONTH_DAY);
-        return birthdayRepo.findBirthdayByDate(from);
+        return birthdayRepo.findBirthdayWithSameDate(from);
     }
 }
