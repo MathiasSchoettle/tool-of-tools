@@ -1,4 +1,4 @@
-package de.mscho.toftws.calendar.entity;
+package de.mscho.toftws.calendar.entity.event;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,17 +15,17 @@ public abstract class AbstractCalendarEvent {
 
     @NotBlank
     @Size(max = 64)
-    private String title;
+    protected String title;
 
     @Size(max = 256)
-    private String description;
+    protected String description;
 
     @Pattern(regexp = "^#([0-9a-fA-F]{6})$")
-    private String hexColor;
+    protected String hexColor;
 
     @Size(max = 128)
-    private String location;
+    protected String location;
 
     @Size(max = 256)
-    private String meetingLink;
+    protected String meetingLink;
 }

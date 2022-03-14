@@ -1,10 +1,10 @@
-package de.mscho.toftws.calendar.util;
+package de.mscho.toftws.calendar.entity.util;
 
-import de.mscho.toftws.calendar.entity.AbstractCalendarEvent;
-import de.mscho.toftws.calendar.entity.CalendarEvent;
-import de.mscho.toftws.calendar.entity.CalendarPosition;
-import de.mscho.toftws.calendar.entity.Recurrence;
-import de.mscho.toftws.util.TimeDateProperties;
+import de.mscho.toftws.calendar.entity.event.AbstractCalendarEvent;
+import de.mscho.toftws.calendar.entity.event.CalendarEvent;
+import de.mscho.toftws.calendar.entity.event.CalendarPosition;
+import de.mscho.toftws.calendar.entity.recurrence.Recurrence;
+import de.mscho.toftws.util.DateTimeProperties;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
@@ -65,7 +65,7 @@ public class CalendarEventBuilder {
             return this.startDateTime.plusSeconds(duration);
         }
 
-        return potentialUntilDate == null ? TimeDateProperties.MAX_OFFSET_DATETIME : potentialUntilDate;
+        return potentialUntilDate == null ? DateTimeProperties.MAX_OFFSET_DATETIME : potentialUntilDate;
     }
 
     private CalendarEvent buildCalendarEvent(AbstractCalendarEvent event, CalendarPosition position) {

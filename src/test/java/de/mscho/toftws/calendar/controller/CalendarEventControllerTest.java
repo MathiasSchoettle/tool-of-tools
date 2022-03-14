@@ -1,6 +1,11 @@
 package de.mscho.toftws.calendar.controller;
 
-import de.mscho.toftws.calendar.entity.*;
+import de.mscho.toftws.calendar.entity.event.DayEvent;
+import de.mscho.toftws.calendar.entity.event.DayspanEvent;
+import de.mscho.toftws.calendar.entity.event.TimepointEvent;
+import de.mscho.toftws.calendar.entity.event.TimespanEvent;
+import de.mscho.toftws.calendar.entity.recurrence.Recurrence;
+import de.mscho.toftws.calendar.repository.controller.CalendarEventController;
 import de.mscho.toftws.calendar.service.CalendarEventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -27,6 +32,10 @@ public class CalendarEventControllerTest {
     CalendarEventService calendarEventService;
 
     OffsetDateTime until = OffsetDateTime.of(LocalDateTime.of(2020, 12, 3, 4, 52, 28), ZoneOffset.UTC);
+
+    OffsetDateTime from = OffsetDateTime.of(LocalDateTime.of(2020, 1, 3, 4, 52, 28), ZoneOffset.UTC);
+
+    OffsetDateTime to = OffsetDateTime.of(LocalDateTime.of(2022, 5, 7, 23, 5, 12), ZoneOffset.UTC);
 
     @BeforeEach
     public void beforeEach() {
@@ -63,5 +72,13 @@ public class CalendarEventControllerTest {
         calendarEventController.addDayspanEvent(new DayspanEvent(), Recurrence.NEVER, until);
 
         verify(calendarEventService, times(1)).addDayspanEvent(any(DayspanEvent.class), any(Recurrence.class), any(OffsetDateTime.class));
+    }
+
+    @Test
+    public void Get_Calendar_Events_of_Date_Time_Span_Calls_Service_Get_Events_Of_Timespan() {
+
+        calendarEventController.getCalendarEventsOfDateTimeSpan(from, to);
+
+        verify(calendarEventService, times(1)).getEventsOfTimespan(any(OffsetDateTime.class), any(OffsetDateTime.class));
     }
 }

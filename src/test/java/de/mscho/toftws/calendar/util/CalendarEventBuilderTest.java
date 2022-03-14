@@ -1,7 +1,9 @@
 package de.mscho.toftws.calendar.util;
 
-import de.mscho.toftws.calendar.entity.*;
-import de.mscho.toftws.util.TimeDateProperties;
+import de.mscho.toftws.calendar.entity.event.*;
+import de.mscho.toftws.calendar.entity.recurrence.Recurrence;
+import de.mscho.toftws.calendar.entity.util.CalendarEventBuilder;
+import de.mscho.toftws.util.DateTimeProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -96,7 +98,7 @@ public class CalendarEventBuilderTest {
 
         CalendarEvent event = builder.build(timepoint, null, null);
 
-        assertEquals(TimeDateProperties.MAX_OFFSET_DATETIME, event.getCalendarPosition().getUntilDate());
+        assertEquals(DateTimeProperties.MAX_OFFSET_DATETIME, event.getCalendarPosition().getUntilDate());
     }
 
     @Test

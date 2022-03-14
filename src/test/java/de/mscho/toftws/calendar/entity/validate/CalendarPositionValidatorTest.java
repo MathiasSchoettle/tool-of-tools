@@ -1,7 +1,7 @@
 package de.mscho.toftws.calendar.entity.validate;
 
-import de.mscho.toftws.calendar.entity.CalendarPosition;
-import de.mscho.toftws.calendar.entity.Recurrence;
+import de.mscho.toftws.calendar.entity.event.CalendarPosition;
+import de.mscho.toftws.calendar.entity.recurrence.Recurrence;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;

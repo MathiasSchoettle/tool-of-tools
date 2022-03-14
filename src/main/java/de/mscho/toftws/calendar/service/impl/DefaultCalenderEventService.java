@@ -1,9 +1,11 @@
 package de.mscho.toftws.calendar.service.impl;
 
-import de.mscho.toftws.calendar.entity.*;
+import de.mscho.toftws.calendar.entity.event.*;
+import de.mscho.toftws.calendar.entity.recurrence.Recurrence;
 import de.mscho.toftws.calendar.repository.CalendarEventRepository;
 import de.mscho.toftws.calendar.service.CalendarEventService;
-import de.mscho.toftws.calendar.util.CalendarEventBuilder;
+import de.mscho.toftws.calendar.entity.util.CalendarEventBuilder;
+import de.mscho.toftws.calendar.entity.util.EventBuilder;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 
@@ -69,5 +73,19 @@ public class DefaultCalenderEventService implements CalendarEventService {
         CalendarEvent calendarEvent = calendarEventBuilder.build(dayspanEvent, potentialUntilDate, recurrence);
 
         return calendarEventRepository.save(calendarEvent);
+    }
+
+    @Override
+    public List<AbstractCalendarEvent> getEventsOfTimespan(OffsetDateTime fromDate, OffsetDateTime toDate) {
+
+        List<AbstractCalendarEvent> returnEvents = new ArrayList<>();
+        List<CalendarEvent> calendarEvents = calendarEventRepository.findAllByCalendarPosition_UntilDateGreaterThanEqualAndCalendarPosition_StartDateLessThan(fromDate, toDate);
+
+        for( CalendarEvent calendarEvent : calendarEvents ) {
+            List<AbstractCalendarEvent> events = new EventBuilder(calendarEvent, fromDate, toDate).build();
+            returnEvents.addAll(events);
+        }
+
+        return returnEvents;
     }
 }

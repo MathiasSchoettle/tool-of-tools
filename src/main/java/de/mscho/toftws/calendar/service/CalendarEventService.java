@@ -1,8 +1,10 @@
 package de.mscho.toftws.calendar.service;
 
-import de.mscho.toftws.calendar.entity.*;
+import de.mscho.toftws.calendar.entity.event.*;
+import de.mscho.toftws.calendar.entity.recurrence.Recurrence;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 public interface CalendarEventService {
 
@@ -13,4 +15,6 @@ public interface CalendarEventService {
     CalendarEvent addDayEvent(DayEvent dayEvent, Recurrence recurrence, OffsetDateTime potentialUntilDate);
 
     CalendarEvent addDayspanEvent(DayspanEvent dayspanevent, Recurrence recurrence, OffsetDateTime potentialUntilDate);
+
+    List<AbstractCalendarEvent> getEventsOfTimespan(OffsetDateTime fromDate, OffsetDateTime toDate);
 }

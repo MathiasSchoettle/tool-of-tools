@@ -1,14 +1,16 @@
-package de.mscho.toftws.calendar.entity;
+package de.mscho.toftws.calendar.entity.event;
 
+import de.mscho.toftws.calendar.entity.recurrence.Recurrence;
 import de.mscho.toftws.calendar.entity.validate.constraint.CalendarPositionConstraint;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
 
 @Getter
 @Setter

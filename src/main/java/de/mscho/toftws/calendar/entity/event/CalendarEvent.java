@@ -1,4 +1,4 @@
-package de.mscho.toftws.calendar.entity;
+package de.mscho.toftws.calendar.entity.event;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

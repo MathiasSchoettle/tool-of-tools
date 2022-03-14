@@ -1,6 +1,7 @@
 package de.mscho.toftws.calendar.service;
 
-import de.mscho.toftws.calendar.entity.*;
+import de.mscho.toftws.calendar.entity.event.*;
+import de.mscho.toftws.calendar.entity.recurrence.Recurrence;
 import de.mscho.toftws.calendar.repository.CalendarEventRepository;
 import de.mscho.toftws.calendar.service.impl.DefaultCalenderEventService;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,12 +37,18 @@ public class DefaultCalendarEventServiceTest {
 
     OffsetDateTime untilDateTime;
 
+    OffsetDateTime from;
+
+    OffsetDateTime to;
+
     @BeforeEach
     public void beforeEach() {
         this.service = new DefaultCalenderEventService(repository, logger);
         this.startDate = LocalDate.of(2020, 3, 12);
         this.startDateTime = OffsetDateTime.of(LocalDateTime.of(2019, 4, 23, 12, 43, 23), ZoneOffset.UTC);
         this.untilDateTime = OffsetDateTime.of(LocalDateTime.of(2020, 4, 12, 0, 0, 0), ZoneOffset.UTC);
+        this.from =  OffsetDateTime.of(LocalDateTime.of(2020, 1, 3, 4, 52, 28), ZoneOffset.UTC);
+        this.to = OffsetDateTime.of(LocalDateTime.of(2022, 5, 7, 23, 5, 12), ZoneOffset.UTC);
     }
 
     @Test
@@ -88,5 +95,13 @@ public class DefaultCalendarEventServiceTest {
         this.service.addDayspanEvent(event, Recurrence.NEVER, untilDateTime);
 
         verify(repository, times(1)).save(any(CalendarEvent.class));
+    }
+
+    @Test
+    public void Get_Events_of_Timespan_Calls_Repository_Once() {
+
+        this.service.getEventsOfTimespan(from, to);
+
+        verify(repository, times(1)).findAllByCalendarPosition_UntilDateGreaterThanEqualAndCalendarPosition_StartDateLessThan(any(OffsetDateTime.class), any(OffsetDateTime.class));
     }
 }
