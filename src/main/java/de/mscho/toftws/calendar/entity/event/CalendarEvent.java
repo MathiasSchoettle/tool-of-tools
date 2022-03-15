@@ -10,13 +10,7 @@ import javax.validation.Valid;
 @Getter
 @Setter
 @Entity
-@EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
 public class CalendarEvent extends AbstractCalendarEvent {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
-    private long id;
 
     @Valid
     @Embedded

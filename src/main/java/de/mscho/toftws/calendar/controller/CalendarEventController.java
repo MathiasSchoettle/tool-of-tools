@@ -1,10 +1,9 @@
-package de.mscho.toftws.calendar.repository.controller;
+package de.mscho.toftws.calendar.controller;
 
 import de.mscho.toftws.calendar.entity.event.*;
 import de.mscho.toftws.calendar.entity.recurrence.Recurrence;
 import de.mscho.toftws.calendar.service.CalendarEventService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 

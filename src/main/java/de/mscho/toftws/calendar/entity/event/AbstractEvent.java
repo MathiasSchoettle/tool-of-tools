@@ -25,11 +25,12 @@ public abstract class AbstractEvent extends AbstractCalendarEvent {
     }
 
     private void setEventContent(AbstractCalendarEvent event) {
-        this.title = event.title;
-        this.description = event.description;
-        this.hexColor = event.hexColor;
-        this.location = event.location;
-        this.meetingLink = event.meetingLink;
+        this.id = event.getId();
+        this.title = event.getTitle();
+        this.description = event.getDescription();
+        this.hexColor = event.getHexColor();
+        this.location = event.getLocation();
+        this.meetingLink = event.getMeetingLink();
     }
 
     public static AbstractEvent getEventFromCalendarEvent(CalendarEvent calendarEvent) {

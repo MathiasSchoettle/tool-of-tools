@@ -1,5 +1,6 @@
 package de.mscho.toftws.calendar.entity.event;
 
+import de.mscho.toftws.entity.AbstractEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +12,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @MappedSuperclass
-public abstract class AbstractCalendarEvent {
+public abstract class AbstractCalendarEvent extends AbstractEntity {
 
     @NotBlank
     @Size(max = 64)

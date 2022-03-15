@@ -14,6 +14,7 @@ public class TimepointEvent extends AbstractEvent {
     OffsetDateTime dateTime;
 
     public TimepointEvent() {
+        
     }
 
     public TimepointEvent(OffsetDateTime dateTime) {

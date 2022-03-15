@@ -5,7 +5,6 @@ import de.mscho.toftws.calendar.entity.event.DayspanEvent;
 import de.mscho.toftws.calendar.entity.event.TimepointEvent;
 import de.mscho.toftws.calendar.entity.event.TimespanEvent;
 import de.mscho.toftws.calendar.entity.recurrence.Recurrence;
-import de.mscho.toftws.calendar.repository.controller.CalendarEventController;
 import de.mscho.toftws.calendar.service.CalendarEventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;

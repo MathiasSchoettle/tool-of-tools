@@ -1,6 +1,5 @@
 package de.mscho.toftws.calendar.controller;
 
-import de.mscho.toftws.calendar.repository.controller.CalendarEventController;
 import de.mscho.toftws.calendar.service.CalendarEventService;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
