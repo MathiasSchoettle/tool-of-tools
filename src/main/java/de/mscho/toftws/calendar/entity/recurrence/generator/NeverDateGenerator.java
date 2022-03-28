@@ -15,4 +15,9 @@ public class NeverDateGenerator extends RecurrenceDateGenerator {
     public OffsetDateTime getNextOccurrence(OffsetDateTime dateTime) {
         return DateTimeProperties.MAX_OFFSET_DATETIME;
     }
+
+    @Override
+    public OffsetDateTime getLastOccurrence(OffsetDateTime start, OffsetDateTime end) {
+        return start;
+    }
 }

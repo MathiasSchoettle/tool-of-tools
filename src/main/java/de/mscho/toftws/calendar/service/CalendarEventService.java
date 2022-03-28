@@ -17,4 +17,8 @@ public interface CalendarEventService {
     CalendarEvent addDayspanEvent(DayspanEvent dayspanevent, Recurrence recurrence, OffsetDateTime potentialUntilDate);
 
     List<AbstractCalendarEvent> getEventsOfTimespan(OffsetDateTime fromDate, OffsetDateTime toDate);
+
+    void deleteCalendarEvent(long id);
+
+    void endCalendarEvent(long id);
 }

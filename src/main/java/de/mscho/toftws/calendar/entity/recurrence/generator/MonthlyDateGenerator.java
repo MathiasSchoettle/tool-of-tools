@@ -55,6 +55,11 @@ public class MonthlyDateGenerator extends RecurrenceDateGenerator {
         return nextDateTime;
     }
 
+    @Override
+    public OffsetDateTime getLastOccurrence(OffsetDateTime start, OffsetDateTime end) {
+        return null;
+    }
+
     private boolean isWithSameDayAndTime(OffsetDateTime first, OffsetDateTime second) {
 
         boolean isSameDay = first.getDayOfMonth() == second.getDayOfMonth();

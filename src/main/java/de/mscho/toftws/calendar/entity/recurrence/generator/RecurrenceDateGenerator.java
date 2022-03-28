@@ -22,4 +22,6 @@ public abstract class RecurrenceDateGenerator {
     protected abstract OffsetDateTime getFirstOccurrenceWithStartBeforeFrom(OffsetDateTime from, OffsetDateTime to, OffsetDateTime start);
 
     public abstract OffsetDateTime getNextOccurrence(OffsetDateTime dateTime);
+
+    public abstract OffsetDateTime getLastOccurrence(OffsetDateTime start, OffsetDateTime end);
 }

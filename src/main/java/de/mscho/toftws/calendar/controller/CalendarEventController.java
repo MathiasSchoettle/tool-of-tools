@@ -5,9 +5,13 @@ import de.mscho.toftws.calendar.entity.recurrence.Recurrence;
 import de.mscho.toftws.calendar.service.CalendarEventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.xml.ws.Response;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -56,5 +60,22 @@ public class CalendarEventController {
                                                                        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime to) {
 
         return calendarEventService.getEventsOfTimespan(from, to);
+    }
+
+    @DeleteMapping(path = "{id}")
+    public void deleteCalendarEvent(@PathVariable long id) {
+
+        calendarEventService.deleteCalendarEvent(id);
+    }
+
+    @PatchMapping(path = "{id}")
+    public void endCalendarEvent(@PathVariable long id) {
+
+        calendarEventService.endCalendarEvent(id);
+    }
+
+    @PutMapping(path = "{id}")
+    public void updateCalendarEvent(@PathVariable long id, @RequestBody @Valid TimepointEvent timepointEvent) {
+        // TODO
     }
 }

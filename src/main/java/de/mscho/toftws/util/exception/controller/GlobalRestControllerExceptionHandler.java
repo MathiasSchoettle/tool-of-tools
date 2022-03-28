@@ -2,6 +2,7 @@ package de.mscho.toftws.util.exception.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
@@ -9,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.UnsatisfiedServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -60,5 +62,16 @@ public class GlobalRestControllerExceptionHandler {
             sb.append(violation.getMessage()).append("\n");
         }
         return sb.toString();
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    private String handleNumberFormatException(MethodArgumentTypeMismatchException e) {
+
+        int parameterIndex = e.getParameter().getParameterIndex();
+        String parameterName = e.getName();
+        String parameterValue = String.valueOf(e.getValue());
+        String requiredType = String.valueOf(e.getRequiredType());
+
+        return String.format("Wrong type for parameter %d (%s) with value '%s'. Required type: %s", parameterIndex, parameterName, parameterValue, requiredType);
     }
 }

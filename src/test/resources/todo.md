@@ -15,6 +15,8 @@ _Services to store and load calendar events_
 - finish up integration tests for default service
   - store events in database and load over timeframe
 
+- tests for get last occurrence in date generators
+
 ##System Metadata:
 _i.e. CPU, RAM and Memory usage_
 

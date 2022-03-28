@@ -31,4 +31,15 @@ public class WeeklyDateGenerator extends RecurrenceDateGenerator {
     public OffsetDateTime getNextOccurrence(OffsetDateTime dateTime) {
         return dateTime.plusSeconds(secondsOfWeeks);
     }
+
+    @Override
+    public OffsetDateTime getLastOccurrence(OffsetDateTime start, OffsetDateTime end) {
+
+        long secondsBetween = Duration.between(start, end).toSeconds();
+        long secondsTo = secondsBetween - secondsBetween % secondsOfWeeks;
+
+        secondsTo = secondsBetween <= 0 ? 0 : secondsTo;
+
+        return start.plusSeconds(secondsTo);
+    }
 }
