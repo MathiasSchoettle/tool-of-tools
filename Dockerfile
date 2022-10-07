@@ -1,7 +1,4 @@
-
-FROM amazonlinux:2
-ARG version=18.0.2.9-1
-ENV JAVA_HOME=/usr/lib/jvm/java-18-amazon-corretto
+FROM eclipse-temurin:18-jdk
 ENV APP_HOME=/usr/app/
 WORKDIR $APP_HOME
 COPY target/*.jar app.jar
