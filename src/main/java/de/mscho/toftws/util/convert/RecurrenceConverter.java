@@ -1,6 +1,6 @@
 package de.mscho.toftws.util.convert;
 
-import de.mscho.toftws.calendar.entity.recurrence.Recurrence;
+import de.mscho.toftws.entity.calendar.recurrence.Recurrence;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 

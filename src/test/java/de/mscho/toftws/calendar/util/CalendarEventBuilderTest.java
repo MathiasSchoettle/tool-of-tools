@@ -1,8 +1,8 @@
 package de.mscho.toftws.calendar.util;
 
-import de.mscho.toftws.calendar.entity.event.*;
-import de.mscho.toftws.calendar.entity.recurrence.Recurrence;
-import de.mscho.toftws.calendar.entity.util.CalendarEventBuilder;
+import de.mscho.toftws.entity.calendar.event.*;
+import de.mscho.toftws.entity.calendar.recurrence.Recurrence;
+import de.mscho.toftws.entity.calendar.util.CalendarEventBuilder;
 import de.mscho.toftws.util.DateTimeProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;

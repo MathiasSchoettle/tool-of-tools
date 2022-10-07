@@ -1,9 +1,10 @@
 package de.mscho.toftws.calendar.service;
 
-import de.mscho.toftws.calendar.entity.event.*;
-import de.mscho.toftws.calendar.entity.recurrence.Recurrence;
-import de.mscho.toftws.calendar.repository.CalendarEventRepository;
-import de.mscho.toftws.calendar.service.impl.DefaultCalenderEventService;
+import de.mscho.toftws.entity.calendar.event.*;
+import de.mscho.toftws.entity.calendar.recurrence.Recurrence;
+import de.mscho.toftws.repository.CalendarEventRepo;
+import de.mscho.toftws.service.CalendarEventService;
+import de.mscho.toftws.service.impl.DefaultCalenderEventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ public class DefaultCalendarEventServiceTest {
     CalendarEventService service;
 
     @Mock
-    CalendarEventRepository repository;
+    CalendarEventRepo repository;
 
     @Mock
     Logger logger;

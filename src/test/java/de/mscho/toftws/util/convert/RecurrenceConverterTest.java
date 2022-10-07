@@ -1,6 +1,6 @@
 package de.mscho.toftws.util.convert;
 
-import de.mscho.toftws.calendar.entity.recurrence.Recurrence;
+import de.mscho.toftws.entity.calendar.recurrence.Recurrence;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;

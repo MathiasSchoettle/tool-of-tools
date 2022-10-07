@@ -1,11 +1,12 @@
 package de.mscho.toftws.calendar.controller;
 
-import de.mscho.toftws.calendar.entity.event.DayEvent;
-import de.mscho.toftws.calendar.entity.event.DayspanEvent;
-import de.mscho.toftws.calendar.entity.event.TimepointEvent;
-import de.mscho.toftws.calendar.entity.event.TimespanEvent;
-import de.mscho.toftws.calendar.entity.recurrence.Recurrence;
-import de.mscho.toftws.calendar.service.CalendarEventService;
+import de.mscho.toftws.entity.calendar.event.DayEvent;
+import de.mscho.toftws.entity.calendar.event.DayspanEvent;
+import de.mscho.toftws.entity.calendar.event.TimepointEvent;
+import de.mscho.toftws.entity.calendar.event.TimespanEvent;
+import de.mscho.toftws.entity.calendar.recurrence.Recurrence;
+import de.mscho.toftws.service.CalendarEventService;
+import de.mscho.toftws.controller.CalendarEventController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
