@@ -1,5 +1,5 @@
 
-FROM adoptopenjdk/amazonlinux:2
+FROM amazonlinux:2
 ARG version=18.0.2.9-1
 ENV APP_HOME=/usr/app/
 WORKDIR $APP_HOME
