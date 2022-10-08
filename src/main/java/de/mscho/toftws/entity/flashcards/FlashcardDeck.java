@@ -10,10 +10,7 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Entity
 @NoArgsConstructor
@@ -31,6 +28,13 @@ public class FlashcardDeck extends AbstractEntity {
     }
 
     public Optional<Flashcard> getNextFlashcard(LocalDateTime current) {
-        return cards.stream().min(Comparator.comparing(flashcard -> flashcard.getDurationOffset(current)));
+        List<Flashcard> possibleCards = cards.stream().filter(card -> card.repetition.nextPlannedOccurrence.isBefore(current.plusMinutes(20))).toList();
+
+        if (possibleCards.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Flashcard nextCard = possibleCards.get(new Random().nextInt(possibleCards.size()));
+        return Optional.of(nextCard);
     }
 }

@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Entity
@@ -19,6 +18,7 @@ public class Flashcard extends AbstractEntity {
 
     @NotNull
     @ManyToOne
+    @JsonIgnore
     public FlashcardDeck deck;
     @NotNull
     @JsonIgnore
@@ -51,10 +51,6 @@ public class Flashcard extends AbstractEntity {
             case GOOD -> repetition.good();
             case EASY -> repetition.easy();
         }
-    }
-
-    public Duration getDurationOffset(LocalDateTime current) {
-        return Duration.between(current, repetition.lastAnswered.plus(repetition.learnInterval));
     }
 
     public enum FlashcardAnswer {

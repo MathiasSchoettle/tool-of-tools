@@ -7,40 +7,41 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Embeddable
 @NoArgsConstructor
 public class FlashcardRepetition {
-
-    @DecimalMin("1.3")
-    public double easeFactor = 2.5;
-
     @NotNull
-    public Duration learnInterval = Duration.ofMinutes(1);
-
+    @DecimalMin("1.3")
+    public Double easeFactor = 2.5;
+    @NotNull
+    @DecimalMin("0")
+    public Double dayInterval = 0.0;
     @NotNull
     public LocalDateTime lastAnswered;
-
+    @NotNull
+    public LocalDateTime nextPlannedOccurrence;
     @NotNull
     @Enumerated(EnumType.STRING)
     public LearningStep learningStep = LearningStep.INITIAL;
 
     public FlashcardRepetition(LocalDateTime lastAnswered) {
         this.lastAnswered = lastAnswered;
+        this.nextPlannedOccurrence = lastAnswered;
     }
 
     public void again() {
         lastAnswered = LocalDateTime.now();
 
-        if (this.learningStep.equals(LearningStep.GRADUATED)) {
+        if (learningStep.equals(LearningStep.GRADUATED)) {
             easeFactor -= 0.2;
-            this.learnInterval = Duration.ofMinutes(10);
-            this.learningStep = LearningStep.INTERMEDIATE;
+            dayInterval = 0.0;
+            nextPlannedOccurrence = lastAnswered.plusMinutes(10);
+            learningStep = LearningStep.INTERMEDIATE;
         } else {
-            this.learnInterval = Duration.ofMinutes(1);
-            this.learningStep = LearningStep.INITIAL;
+            nextPlannedOccurrence = lastAnswered.plusMinutes(1);
+            learningStep = LearningStep.INITIAL;
         }
     }
 
@@ -49,7 +50,7 @@ public class FlashcardRepetition {
 
         if (learningStep.equals(LearningStep.GRADUATED)) {
             easeFactor -= 0.15;
-            learnInterval = Duration.ofDays((long) (learnInterval.toDays() * 1.2));
+            setStepAndUpdateInterval(LearningStep.GRADUATED, dayInterval * 1.2);
         }
     }
 
@@ -59,14 +60,11 @@ public class FlashcardRepetition {
         switch (learningStep) {
             case INITIAL -> {
                 learningStep = LearningStep.INTERMEDIATE;
-                learnInterval = Duration.ofMinutes(10);
+                nextPlannedOccurrence = lastAnswered.plusMinutes(10);
             }
-            case INTERMEDIATE -> {
-                learningStep = LearningStep.FINAL;
-                learnInterval = Duration.ofDays(1);
-            }
-            case FINAL -> learningStep = LearningStep.GRADUATED;
-            case GRADUATED -> learnInterval = Duration.ofDays((long) (learnInterval.toDays() * easeFactor));
+            case INTERMEDIATE -> setStepAndUpdateInterval(LearningStep.FINAL, 1.0);
+            case FINAL -> setStepAndUpdateInterval(LearningStep.GRADUATED, 2.0);
+            case GRADUATED -> setStepAndUpdateInterval(LearningStep.GRADUATED, dayInterval * easeFactor);
         }
     }
 
@@ -74,11 +72,18 @@ public class FlashcardRepetition {
         lastAnswered = LocalDateTime.now();
 
         if (learningStep.equals(LearningStep.GRADUATED)) {
-            learnInterval = Duration.ofDays((long) (learnInterval.toDays() * easeFactor));
             easeFactor += 0.15;
+            setStepAndUpdateInterval(LearningStep.GRADUATED, dayInterval * easeFactor);
         } else {
-            learningStep = LearningStep.GRADUATED;
+            setStepAndUpdateInterval(LearningStep.GRADUATED, 2.0);
         }
+    }
+
+    private void setStepAndUpdateInterval(LearningStep nextStep, Double nextDayInterval) {
+        learningStep = nextStep;
+        dayInterval = nextDayInterval;
+        long daysToAdd = Math.max(dayInterval.longValue(), 1L);
+        nextPlannedOccurrence = lastAnswered.plusDays(daysToAdd).withHour(4).withMinute(0).withSecond(0).withNano(0);
     }
 
     public enum LearningStep {
