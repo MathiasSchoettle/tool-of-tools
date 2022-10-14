@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -26,6 +28,27 @@ public class FlashcardService {
         FlashcardDeck deck = new FlashcardDeck(name);
         flashcardDeckRepo.save(deck);
         logger.info("Created flashcardDeck (id: {}, name: {})", deck.id, name);
+    }
+
+    public boolean deleteFlashcardDeck(Long deckId) {
+        Integer deletedAmount = flashcardDeckRepo.deleteFlashcardDeckById(deckId);
+        logger.info("Deleted flashcardDeck (id: {})", deckId);
+        return deletedAmount > 0;
+    }
+
+    public List<FlashcardDeck> allDecks() {
+        return flashcardDeckRepo.findAll();
+    }
+
+    public List<Flashcard> allCardsOfDeck(Long deckId) {
+        Optional<FlashcardDeck> deckOptional = flashcardDeckRepo.findById(deckId);
+
+        if (deckOptional.isEmpty()) {
+            logger.info("No flashcardDeck found for id {}", deckId);
+            return new ArrayList<>();
+        }
+
+        return deckOptional.get().cards;
     }
 
     public void addSimpleFlashcard(Long deckId, String question, String solution) {
@@ -51,19 +74,6 @@ public class FlashcardService {
 
     public boolean deleteFlashcard(Long cardId) {
         return flashcardRepo.deleteFlashcardById(cardId) > 0;
-    }
-
-    public Integer getLearnableCount(Long deckId) {
-        Optional<FlashcardDeck> deckOptional = flashcardDeckRepo.findById(deckId);
-
-        if (deckOptional.isEmpty()) {
-            logger.info("No flashcardDeck found for id {}", deckId);
-            return 0;
-        }
-
-        FlashcardDeck deck = deckOptional.get();
-
-        return deck.cards.size();
     }
 
     public Optional<Flashcard> getNextFlashcard(Long deckId) {

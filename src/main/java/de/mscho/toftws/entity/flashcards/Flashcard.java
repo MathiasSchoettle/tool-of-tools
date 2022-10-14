@@ -13,9 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Flashcard extends AbstractEntity {
     @NotNull
-    @OneToOne(cascade = CascadeType.ALL)
     public FlashcardContent content;
-
     @NotNull
     @ManyToOne
     @JsonIgnore

@@ -1,6 +1,9 @@
 package de.mscho.toftws.controller;
 
 import de.mscho.toftws.entity.flashcards.Flashcard;
+import de.mscho.toftws.entity.flashcards.FlashcardDeck;
+import de.mscho.toftws.entity.flashcards.responses.FlashcardDeckResponse;
+import de.mscho.toftws.entity.flashcards.responses.FlashcardResponse;
 import de.mscho.toftws.service.impl.FlashcardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,9 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin
 @RequestMapping("flash")
 @RequiredArgsConstructor
 @Validated
@@ -24,9 +30,22 @@ public class FlashcardController {
         flashcardService.createFlashcardDeck(name);
     }
 
-    @GetMapping("deck/count")
-    public Integer getLearnableCount(@RequestParam Long deckId) {
-        return flashcardService.getLearnableCount(deckId);
+    @GetMapping("deck/all")
+    public List<FlashcardDeckResponse> allDecks() {
+        List<FlashcardDeck> decks = flashcardService.allDecks();
+        LocalDateTime current = LocalDateTime.now();
+        return decks.stream().map(deck -> FlashcardDeckResponse.build(deck, current)).toList();
+    }
+
+    @DeleteMapping("deck")
+    public boolean deleteDeck(@RequestParam Long deckId) {
+        return flashcardService.deleteFlashcardDeck(deckId);
+    }
+
+    @GetMapping("deck/{deckId}/all")
+    public List<FlashcardResponse> allCards(@PathVariable Long deckId) {
+        List<Flashcard> cards = flashcardService.allCardsOfDeck(deckId);
+        return cards.stream().map(FlashcardResponse::build).toList();
     }
 
     @PostMapping("card")

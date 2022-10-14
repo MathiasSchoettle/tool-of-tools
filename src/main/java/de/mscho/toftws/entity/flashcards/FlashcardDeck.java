@@ -28,7 +28,7 @@ public class FlashcardDeck extends AbstractEntity {
     }
 
     public Optional<Flashcard> getNextFlashcard(LocalDateTime current) {
-        List<Flashcard> possibleCards = cards.stream().filter(card -> card.repetition.nextPlannedOccurrence.isBefore(current.plusMinutes(20))).toList();
+        List<Flashcard> possibleCards = getPossibleCards(current);
 
         if (possibleCards.isEmpty()) {
             return Optional.empty();
@@ -36,5 +36,14 @@ public class FlashcardDeck extends AbstractEntity {
 
         Flashcard nextCard = possibleCards.get(new Random().nextInt(possibleCards.size()));
         return Optional.of(nextCard);
+    }
+
+    public Integer getCardStudyCount(LocalDateTime current) {
+        List<Flashcard> possibleCards = getPossibleCards(current);
+        return possibleCards.size();
+    }
+
+    private List<Flashcard> getPossibleCards(LocalDateTime current) {
+        return cards.stream().filter(card -> card.repetition.nextPlannedOccurrence.isBefore(current.plusMinutes(20))).toList();
     }
 }
