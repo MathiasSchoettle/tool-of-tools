@@ -10,3 +10,5 @@
 * Image editor
 * HTTP Request sender (similar to Postman but less bloated)
 * Karteikarten (similar to Anki)
+
+* Note taking Tool (Markdown)
