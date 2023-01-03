@@ -72,6 +72,23 @@ public class FlashcardService {
         flashcardDeckRepo.save(deck);
     }
 
+    public void updateFlashCard(Long cardId, String question, String solution) {
+        Optional<Flashcard> cardOptional = flashcardRepo.findById(cardId);
+
+        if (cardOptional.isEmpty()) {
+            logger.info("No Flashcard found for id {}", cardId);
+            return;
+        }
+
+        Flashcard card = cardOptional.get();
+        card.content.question = question;
+        card.content.solution = solution;
+
+        logger.info("Updated flashcard (id: {})", card.id);
+
+        flashcardRepo.save(card);
+    }
+
     public boolean deleteFlashcard(Long cardId) {
         return flashcardRepo.deleteFlashcardById(cardId) > 0;
     }

@@ -55,6 +55,13 @@ public class FlashcardController {
         flashcardService.addSimpleFlashcard(deckId, question, answer);
     }
 
+    @PatchMapping("card/{cardId}")
+    public void updateCard(@PathVariable Long cardId,
+                        @RequestParam @Size(min = 1, max = 1024) String question,
+                        @RequestParam @Size(min = 1, max = 1024) String answer) {
+        flashcardService.updateFlashCard(cardId, question, answer);
+    }
+
     @DeleteMapping("card/{cardId}")
     public boolean removeCard(@PathVariable Long cardId) {
         return flashcardService.deleteFlashcard(cardId);
