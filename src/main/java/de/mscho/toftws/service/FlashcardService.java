@@ -1,4 +1,4 @@
-package de.mscho.toftws.service.impl;
+package de.mscho.toftws.service;
 
 import de.mscho.toftws.entity.flashcards.Flashcard;
 import de.mscho.toftws.entity.flashcards.FlashcardContent;

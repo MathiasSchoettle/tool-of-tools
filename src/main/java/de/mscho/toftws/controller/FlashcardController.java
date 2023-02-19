@@ -4,7 +4,7 @@ import de.mscho.toftws.entity.flashcards.Flashcard;
 import de.mscho.toftws.entity.flashcards.FlashcardDeck;
 import de.mscho.toftws.entity.flashcards.responses.FlashcardDeckResponse;
 import de.mscho.toftws.entity.flashcards.responses.FlashcardResponse;
-import de.mscho.toftws.service.impl.FlashcardService;
+import de.mscho.toftws.service.FlashcardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
