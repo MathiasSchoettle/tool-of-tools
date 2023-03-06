@@ -1,4 +1,4 @@
-package de.mscho.toftws.repository;
+package de.mscho.toftws.repository.flashcard;
 
 import de.mscho.toftws.entity.flashcards.FlashcardDeck;
 import org.springframework.data.repository.CrudRepository;
