@@ -2,7 +2,7 @@ package de.mscho.toftws.entity.calendar.recurrence;
 
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;

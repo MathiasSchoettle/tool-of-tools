@@ -6,13 +6,13 @@ import de.mscho.toftws.entity.calendar.payload.OffsetEventRequest;
 import de.mscho.toftws.entity.calendar.payload.WeeklyEventRequest;
 import de.mscho.toftws.service.CalendarService;
 import de.mscho.toftws.service.CategoryService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
 import java.time.ZonedDateTime;
 import java.util.List;
 

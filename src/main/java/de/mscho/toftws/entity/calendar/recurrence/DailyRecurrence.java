@@ -1,12 +1,13 @@
 package de.mscho.toftws.entity.calendar.recurrence;
 
+import jakarta.persistence.Entity;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.validation.constraints.Positive;
+import jakarta.validation.constraints.Positive;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+
 import java.util.List;
 
 @NoArgsConstructor

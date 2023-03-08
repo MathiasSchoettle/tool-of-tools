@@ -1,4 +1,4 @@
-package de.mscho.toftws.util.log;
+package de.mscho.toftws.configuration.log;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

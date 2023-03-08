@@ -3,7 +3,7 @@ package de.mscho.toftws.entity.calendar.payload;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import de.mscho.toftws.entity.calendar.EventContent;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 public class EventContentDto {
     @NotBlank

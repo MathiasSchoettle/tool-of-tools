@@ -5,11 +5,11 @@ import de.mscho.toftws.entity.calendar.payload.EventDto;
 import de.mscho.toftws.entity.calendar.recurrence.Recurrence;
 import de.mscho.toftws.entity.user.User;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.PositiveOrZero;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.PositiveOrZero;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;

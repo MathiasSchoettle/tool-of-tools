@@ -3,10 +3,10 @@ package de.mscho.toftws.entity.calendar.recurrence;
 import de.mscho.toftws.entity.calendar.util.DaySetConverters;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Positive;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
 import java.time.DayOfWeek;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;

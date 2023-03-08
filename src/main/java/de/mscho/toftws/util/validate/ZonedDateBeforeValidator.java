@@ -1,7 +1,8 @@
 package de.mscho.toftws.util.validate;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+
 import java.time.ZonedDateTime;
 
 public class ZonedDateBeforeValidator implements ConstraintValidator<ZonedDateBefore, Object> {

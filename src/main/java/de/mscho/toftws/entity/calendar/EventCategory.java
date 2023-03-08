@@ -3,9 +3,9 @@ package de.mscho.toftws.entity.calendar;
 import de.mscho.toftws.entity.AbstractEntity;
 import de.mscho.toftws.entity.user.User;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class EventCategory extends AbstractEntity {

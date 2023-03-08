@@ -1,6 +1,6 @@
 package de.mscho.toftws.entity.calendar.payload;
 
-import javax.validation.constraints.Positive;
+import jakarta.validation.constraints.Positive;
 
 public class OffsetEventRequest extends EventRequest {
     @Positive

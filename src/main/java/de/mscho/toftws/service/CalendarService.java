@@ -9,11 +9,11 @@ import de.mscho.toftws.entity.calendar.recurrence.*;
 import de.mscho.toftws.repository.calendar.EventContentRepo;
 import de.mscho.toftws.repository.calendar.EventRepo;
 import de.mscho.toftws.repository.calendar.RecurrenceRepo;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -38,7 +38,6 @@ public class CalendarService {
         logger.info("Deleted Event. id:{}", id);
     }
 
-    @Transactional
     public void createDailyEvent(OffsetEventRequest request) {
         var recurrence = new DailyRecurrence(request.start, request.end, request.offset);
         recurrenceRepo.save(recurrence);
@@ -46,7 +45,6 @@ public class CalendarService {
         logger.info("Created daily calendar event. id:{}", event.id);
     }
 
-    @Transactional
     public void createWeeklyEvent(WeeklyEventRequest request) {
         var recurrence = new WeeklyRecurrence(request.start, request.end, request.offset, request.weekDays);
         recurrenceRepo.save(recurrence);
@@ -54,7 +52,6 @@ public class CalendarService {
         logger.info("Created weekly calendar event. id:{}", event.id);
     }
 
-    @Transactional
     public void createMonthlyEvent(OffsetEventRequest request) {
         var recurrence = new MonthlyRecurrence(request.start, request.end, request.offset);
         recurrenceRepo.save(recurrence);
@@ -62,7 +59,6 @@ public class CalendarService {
         logger.info("Created monthly calendar event. id:{}", event.id);
     }
 
-    @Transactional
     public void createYearlyEvent(EventRequest request) {
         var recurrence = new YearlyRecurrence(request.start, request.end);
         recurrenceRepo.save(recurrence);

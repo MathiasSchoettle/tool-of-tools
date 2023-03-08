@@ -3,14 +3,14 @@ package de.mscho.toftws.service;
 import de.mscho.toftws.entity.calendar.EventCategory;
 import de.mscho.toftws.repository.calendar.CategoryRepo;
 import de.mscho.toftws.repository.calendar.EventRepo;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CategoryService {
     private final Logger logger;
     private final CategoryRepo categoryRepo;
@@ -31,7 +31,6 @@ public class CategoryService {
         logger.info("Created category: {} - {} for user {}", category.id, category.name, category.owner);
     }
 
-    @Transactional
     public void deleteCategory(Long id) {
         var events = eventRepo.getEventsByCategoryId(id);
         events.forEach(e -> e.category = null);

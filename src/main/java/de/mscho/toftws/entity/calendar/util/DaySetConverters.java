@@ -2,7 +2,7 @@ package de.mscho.toftws.entity.calendar.util;
 
 import com.fasterxml.jackson.databind.util.StdConverter;
 
-import javax.persistence.AttributeConverter;
+import jakarta.persistence.AttributeConverter;
 import java.time.DayOfWeek;
 import java.util.Arrays;
 import java.util.Set;
