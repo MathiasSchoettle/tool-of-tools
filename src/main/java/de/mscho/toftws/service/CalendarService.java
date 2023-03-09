@@ -1,5 +1,6 @@
 package de.mscho.toftws.service;
 
+import de.mscho.toftws.configuration.security.AuthenticationProvider;
 import de.mscho.toftws.entity.calendar.Event;
 import de.mscho.toftws.entity.calendar.payload.EventDto;
 import de.mscho.toftws.entity.calendar.payload.EventRequest;
@@ -27,6 +28,7 @@ public class CalendarService {
     private final EventRepo eventRepo;
     private final EventContentRepo contentRepo;
     private final RecurrenceRepo recurrenceRepo;
+    private final AuthenticationProvider authenticationProvider;
 
     public List<EventDto> getEvents(ZonedDateTime from, ZonedDateTime to) {
         var events = eventRepo.getEventsByRecurrenceStartBeforeAndRecurrenceEndAfter(to, from);
@@ -74,7 +76,7 @@ public class CalendarService {
         event.duration = request.duration;
         event.content = content;
         event.recurrence = recurrence;
-        event.creator = null;
+        event.creator = authenticationProvider.getAuthenticatedUser();
         event.category = categoryService.getCategory(request.categoryId);
 
         return eventRepo.save(event);
