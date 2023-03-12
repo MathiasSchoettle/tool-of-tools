@@ -1,11 +1,8 @@
-package de.mscho.toftws.service;
+package de.mscho.toftws.service.calendar;
 
 import de.mscho.toftws.configuration.security.AuthenticationProvider;
 import de.mscho.toftws.entity.calendar.Event;
-import de.mscho.toftws.entity.calendar.payload.EventDto;
-import de.mscho.toftws.entity.calendar.payload.EventRequest;
-import de.mscho.toftws.entity.calendar.payload.OffsetEventRequest;
-import de.mscho.toftws.entity.calendar.payload.WeeklyEventRequest;
+import de.mscho.toftws.entity.calendar.payload.*;
 import de.mscho.toftws.entity.calendar.recurrence.*;
 import de.mscho.toftws.repository.calendar.EventContentRepo;
 import de.mscho.toftws.repository.calendar.EventRepo;
@@ -31,7 +28,7 @@ public class CalendarService {
     private final AuthenticationProvider authenticationProvider;
 
     public List<EventDto> getEvents(ZonedDateTime from, ZonedDateTime to) {
-        var events = eventRepo.getEventsByRecurrenceStartBeforeAndRecurrenceEndAfter(to, from);
+        var events = eventRepo.findEventsByRecurrenceStartBeforeAndRecurrenceEndAfter(to, from);
         return events.stream().map(e -> e.getEvents(from, to)).flatMap(Collection::stream).toList();
     }
 

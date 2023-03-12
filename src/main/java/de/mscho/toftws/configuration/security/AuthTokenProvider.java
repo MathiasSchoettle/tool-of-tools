@@ -1,7 +1,7 @@
 package de.mscho.toftws.configuration.security;
 
 import de.mscho.toftws.configuration.exception.AuthTokenNotFoundException;
-import de.mscho.toftws.service.UserService;
+import de.mscho.toftws.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;

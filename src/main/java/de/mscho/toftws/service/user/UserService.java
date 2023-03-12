@@ -1,7 +1,7 @@
-package de.mscho.toftws.service;
+package de.mscho.toftws.service.user;
 
 import de.mscho.toftws.entity.user.User;
-import de.mscho.toftws.repository.UserRepo;
+import de.mscho.toftws.repository.user.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

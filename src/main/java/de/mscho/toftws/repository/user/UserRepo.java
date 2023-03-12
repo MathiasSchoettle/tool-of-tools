@@ -1,4 +1,4 @@
-package de.mscho.toftws.repository;
+package de.mscho.toftws.repository.user;
 
 import de.mscho.toftws.entity.user.User;
 import org.springframework.data.repository.CrudRepository;

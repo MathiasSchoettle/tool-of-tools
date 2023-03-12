@@ -7,6 +7,6 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 public interface EventRepo extends CrudRepository<Event, Long> {
-    List<Event> getEventsByRecurrenceStartBeforeAndRecurrenceEndAfter(ZonedDateTime to, ZonedDateTime from);
-    List<Event> getEventsByCategoryId(long id);
+    List<Event> findEventsByRecurrenceStartBeforeAndRecurrenceEndAfter(ZonedDateTime to, ZonedDateTime from);
+    List<Event> findEventsByCategoryId(long id);
 }

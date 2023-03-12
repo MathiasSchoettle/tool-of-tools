@@ -5,10 +5,7 @@ import de.mscho.toftws.entity.calendar.payload.EventDto;
 import de.mscho.toftws.entity.calendar.recurrence.Recurrence;
 import de.mscho.toftws.entity.user.User;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.PositiveOrZero;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -25,8 +22,8 @@ public class Event extends AbstractTimedEntity {
     public EventCategory category;
     @OneToOne
     public Recurrence recurrence;
-    @OneToMany
-    public List<RecurrenceDeviation> deviations = new ArrayList<>();
+    @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
+    public List<EventDeviation> deviations = new ArrayList<>();
     @ManyToOne
     public User creator;
 
@@ -59,10 +56,12 @@ public class Event extends AbstractTimedEntity {
                 return Optional.empty();
             }
 
-            event = EventDto.build(deviation.newOccurrence, deviation.duration, deviation.content, category);
+            // use base event content if deviation's content is empty
+            var content = deviation.content == null ? this.content : deviation.content;
+            event = EventDto.buildForDeviation(id, deviation, content, category);
         }
         else {
-            event = EventDto.build(current, duration, content, category);
+            event = EventDto.buildForEvent(current, this);
         }
 
         return Optional.of(event);

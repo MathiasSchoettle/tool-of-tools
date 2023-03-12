@@ -1,10 +1,10 @@
-package de.mscho.toftws.controller;
+package de.mscho.toftws.controller.flashcard;
 
 import de.mscho.toftws.entity.flashcards.Flashcard;
 import de.mscho.toftws.entity.flashcards.FlashcardDeck;
 import de.mscho.toftws.entity.flashcards.responses.FlashcardDeckResponse;
 import de.mscho.toftws.entity.flashcards.responses.FlashcardResponse;
-import de.mscho.toftws.service.FlashcardService;
+import de.mscho.toftws.service.flashcard.FlashcardService;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;

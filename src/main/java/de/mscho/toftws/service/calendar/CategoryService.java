@@ -1,4 +1,4 @@
-package de.mscho.toftws.service;
+package de.mscho.toftws.service.calendar;
 
 import de.mscho.toftws.entity.calendar.EventCategory;
 import de.mscho.toftws.repository.calendar.CategoryRepo;
@@ -32,7 +32,7 @@ public class CategoryService {
     }
 
     public void deleteCategory(Long id) {
-        var events = eventRepo.getEventsByCategoryId(id);
+        var events = eventRepo.findEventsByCategoryId(id);
         events.forEach(e -> e.category = null);
         eventRepo.saveAll(events);
         categoryRepo.deleteById(id);
