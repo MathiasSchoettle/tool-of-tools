@@ -1,26 +1,24 @@
 package de.mscho.toftws.entity.flashcards;
 
-import de.mscho.toftws.entity.AbstractEntity;
+import de.mscho.toftws.entity.AbstractTimedEntity;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 @Entity
 @NoArgsConstructor
-public class FlashcardDeck extends AbstractEntity {
-    @NotNull
-    @Size(max = 64)
+public class FlashcardDeck extends AbstractTimedEntity {
     public String name;
     @OneToMany(mappedBy = "deck")
     @Cascade(CascadeType.ALL)
-    @NotNull
     public List<Flashcard> cards = new ArrayList<>();
 
     public FlashcardDeck(String name) {

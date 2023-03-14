@@ -1,28 +1,19 @@
 package de.mscho.toftws.entity.flashcards;
 
-import lombok.NoArgsConstructor;
-
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
 @Embeddable
 @NoArgsConstructor
 public class FlashcardRepetition {
-    @NotNull
-    @DecimalMin("1.3")
     public Double easeFactor = 2.5;
-    @NotNull
-    @DecimalMin("0")
     public Double dayInterval = 0.0;
-    @NotNull
     public LocalDateTime lastAnswered;
-    @NotNull
     public LocalDateTime nextPlannedOccurrence;
-    @NotNull
     @Enumerated(EnumType.STRING)
     public LearningStep learningStep = LearningStep.INITIAL;
 

@@ -1,32 +1,23 @@
 package de.mscho.toftws.entity.flashcards;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import de.mscho.toftws.entity.AbstractEntity;
+import de.mscho.toftws.entity.AbstractTimedEntity;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
-public class Flashcard extends AbstractEntity {
-    @NotNull
+public class Flashcard extends AbstractTimedEntity {
     public FlashcardContent content;
-    @NotNull
     @ManyToOne
     @JsonIgnore
     public FlashcardDeck deck;
-    @NotNull
     @JsonIgnore
     public FlashcardRepetition repetition;
-    @Min(0)
-    @NotNull
-    public Long totalStudiedSeconds = 0L;
-    @Min(0)
+    public long totalStudiedSeconds = 0L;
     public int countAnsweredCorrect = 0;
-    @Min(0)
     public int countAnsweredTotal = 0;
 
     public Flashcard(FlashcardContent content) {
