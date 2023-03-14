@@ -13,5 +13,5 @@ public class EventCategory extends AbstractEntity {
     public String name;
     public String color;
     @ManyToOne
-    public User owner;
+    public User user;
 }

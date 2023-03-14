@@ -25,7 +25,7 @@ public class Event extends AbstractTimedEntity {
     @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
     public List<EventDeviation> deviations = new ArrayList<>();
     @ManyToOne
-    public User creator;
+    public User user;
 
     /**
      *  Generate eventDto objects from this event which occur between the given timeframe.

@@ -13,13 +13,6 @@ import org.springframework.web.bind.annotation.*;
 public class DeviationController {
     private final DeviationService deviationService;
 
-    /**
-     * TODO check all controllers to only load events which belong to authenticated user
-     *  especially event methods currently would load events for all users
-     *  database migration with flyway is next priority
-     *  finish off calendar event endpoints
-     */
-
     @PostMapping
     public void createDeviation(@RequestParam long eventId, @RequestBody DeviationRequest deviation) {
         deviationService.createDeviation(eventId, deviation);

@@ -28,12 +28,14 @@ public class CalendarService {
     private final AuthenticationProvider authenticationProvider;
 
     public List<EventDto> getEvents(ZonedDateTime from, ZonedDateTime to) {
-        var events = eventRepo.findEventsByRecurrenceStartBeforeAndRecurrenceEndAfter(to, from);
+        var user = authenticationProvider.getAuthenticatedUser();
+        var events = eventRepo.findEventsByRecurrenceStartBeforeAndRecurrenceEndAfterAndUser(to, from, user);
         return events.stream().map(e -> e.getEvents(from, to)).flatMap(Collection::stream).toList();
     }
 
     public void deleteEvent(long id) {
-        eventRepo.deleteById(id);
+        var user = authenticationProvider.getAuthenticatedUser();
+        eventRepo.deleteByIdAndUser(id, user);
         logger.info("Deleted Event. id:{}", id);
     }
 
@@ -73,8 +75,12 @@ public class CalendarService {
         event.duration = request.duration;
         event.content = content;
         event.recurrence = recurrence;
-        event.creator = authenticationProvider.getAuthenticatedUser();
-        event.category = categoryService.getCategory(request.categoryId);
+        event.user = authenticationProvider.getAuthenticatedUser();
+
+        if (request.categoryId != null) {
+            var categoryOptional = categoryService.getCategory(request.categoryId);
+            categoryOptional.ifPresent(category -> event.category = category);
+        }
 
         return eventRepo.save(event);
     }

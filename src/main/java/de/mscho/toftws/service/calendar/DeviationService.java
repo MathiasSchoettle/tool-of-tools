@@ -1,5 +1,6 @@
 package de.mscho.toftws.service.calendar;
 
+import de.mscho.toftws.configuration.security.AuthenticationProvider;
 import de.mscho.toftws.entity.calendar.EventDeviation;
 import de.mscho.toftws.entity.calendar.payload.DeviationRequest;
 import de.mscho.toftws.repository.calendar.DeviationRepo;
@@ -18,12 +19,14 @@ public class DeviationService {
     private final DeviationRepo deviationRepo;
     private final EventRepo eventRepo;
     private final EventContentRepo contentRepo;
+    private final AuthenticationProvider authenticationProvider;
 
     public void createDeviation(long eventId, DeviationRequest deviationDto) {
-        var eventOptional = eventRepo.findById(eventId);
+        var user = authenticationProvider.getAuthenticatedUser();
+        var eventOptional = eventRepo.findByIdAndUser(eventId, user);
 
         if (eventOptional.isEmpty()) {
-            logger.info("Creating deviation not possible as event(id: {}) does not exist", eventId);
+            logger.info("Creating deviation not possible as event(id: {}) does not exist for user(id: {})", eventId, user.id);
             return;
         }
 
@@ -42,10 +45,11 @@ public class DeviationService {
     }
 
     public void deleteDeviation(long deviationId) {
-        var deviationOptional = deviationRepo.findById(deviationId);
+        var user = authenticationProvider.getAuthenticatedUser();
+        var deviationOptional = deviationRepo.findByIdAndEventUser(deviationId, user);
 
         if (deviationOptional.isEmpty()) {
-            logger.info("Can not delete deviation(id: {}). No entity with given id", deviationId);
+            logger.info("Can not delete deviation as deviation(id: {}) does not exist for user(id: {})", deviationId, user.id);
             return;
         }
 
@@ -62,10 +66,11 @@ public class DeviationService {
     }
 
     public void editDeviation(long deviationId, boolean replaceContent, DeviationRequest deviationDto) {
-        var deviationOptional = deviationRepo.findById(deviationId);
+        var user = authenticationProvider.getAuthenticatedUser();
+        var deviationOptional = deviationRepo.findByIdAndEventUser(deviationId, user);
 
         if (deviationOptional.isEmpty()) {
-            logger.info("Editing deviation not possible as deviation(id: {}) does not exist", deviationId);
+            logger.info("Editing deviation not possible as deviation(id: {}) does not exist for user(id: {})", deviationId, user.id);
             return;
         }
 
