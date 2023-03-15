@@ -1,10 +1,12 @@
 package de.mscho.toftws.entity;
 
-import org.springframework.data.annotation.CreatedDate;
+import jakarta.persistence.MappedSuperclass;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.ZonedDateTime;
 
+@MappedSuperclass
 public abstract class AbstractTimedEntity extends AbstractEntity {
-    @CreatedDate
+    @CreationTimestamp
     public ZonedDateTime created;
 }
