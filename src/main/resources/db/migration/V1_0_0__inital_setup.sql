@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS user
 );
 
 INSERT INTO user (created, username, password, auth_token)
-VALUES (UTC_TIMESTAMP(), 'Mathias', '', 'test');
+VALUES (UTC_TIMESTAMP(), 'Test User', '', 'test');
 
 -- Calendar --
 
