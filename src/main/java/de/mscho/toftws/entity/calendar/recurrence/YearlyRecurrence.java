@@ -1,5 +1,7 @@
 package de.mscho.toftws.entity.calendar.recurrence;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.Entity;
@@ -11,8 +13,13 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class YearlyRecurrence extends Recurrence {
-    public YearlyRecurrence(ZonedDateTime start, ZonedDateTime end) {
+    @Positive
+    @NotNull
+    public long offset;
+
+    public YearlyRecurrence(ZonedDateTime start, ZonedDateTime end, long offset) {
         super(start, end);
+        this.offset = offset;
     }
 
     @Override

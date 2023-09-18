@@ -1,50 +1,84 @@
 package de.mscho.toftws.util.controller;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-// TODO is this the way to go?
+// TODO maybe extend ResponseEntityExceptionHandler? and only override methods that should return something different?
+
 @RequiredArgsConstructor
 @RestControllerAdvice
-@ResponseStatus(HttpStatus.BAD_REQUEST)
 public class GlobalRestControllerExceptionHandler {
 
     private final Logger logger;
 
+    @InitBinder
+    private void initBinder(DataBinder binder) {
+        binder.initDirectFieldAccess();
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public String handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        BindingResult bindingResult = e.getBindingResult();
-        return bindingResult.getAllErrors().stream()
-                .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                .collect(Collectors.joining(", "));
+    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        var bindingResult = e.getBindingResult();
+        var fieldErrors = new HashMap<String, String>();
+
+        for (var error : bindingResult.getFieldErrors()) {
+            String field = error.getField();
+            String message = error.getDefaultMessage();
+            fieldErrors.put(field, message);
+        }
+
+        return new ResponseEntity<>(fieldErrors, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public String handleHttpMessageNotReadableException() {
-        return "The given JSON was not parseable";
+    public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+        try {
+            throw e.getCause();
+        } catch (InvalidFormatException invalidFormatException) {
+            var type = invalidFormatException.getTargetType();
+            if (type.isEnum() && !invalidFormatException.getPath().isEmpty()) {
+                var fieldName = invalidFormatException.getPath().get(0).getFieldName();
+                var value = String.valueOf(invalidFormatException.getValue());
+                var allowedValues = Arrays.stream(type.getEnumConstants()).map(Object::toString).collect(Collectors.joining(","));
+                var msg = MessageFormat.format("Field [{0}] had value [{1}]. Allowed values are [{2}]", fieldName, value, allowedValues);
+                return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+            }
+        } catch (Throwable ignore) {
+            logger.warn("Unhandled exception", e);
+            return new ResponseEntity<>("Unknown error", HttpStatus.BAD_REQUEST);
+        }
+
+        logger.warn("Handled exception did not result in a return value", e);
+        return new ResponseEntity<>("Json not valid", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public String handleConstraintViolationException(ConstraintViolationException e) {
+    public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
         var violations = e.getConstraintViolations();
-        return violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining("\n"));
+        var error = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining("\n"));
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Throwable.class)
-    private String defaultHandler(Throwable e) {
+    private ResponseEntity<String> defaultHandler(Throwable e) {
         logger.warn("Unhandled Exception: ", e);
-        return "Something went wrong";
+        return new ResponseEntity<>("Something went wrong", HttpStatus.BAD_REQUEST);
     }
 }

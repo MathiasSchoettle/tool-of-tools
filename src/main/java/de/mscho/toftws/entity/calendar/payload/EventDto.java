@@ -5,10 +5,12 @@ import de.mscho.toftws.entity.calendar.Event;
 import de.mscho.toftws.entity.calendar.EventCategory;
 import de.mscho.toftws.entity.calendar.EventContent;
 import de.mscho.toftws.entity.calendar.EventDeviation;
+import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
 
 
+@NoArgsConstructor
 public class EventDto {
     public Long id;
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -20,8 +22,6 @@ public class EventDto {
     public String categoryName;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public String color;
-
-    private EventDto() {}
 
     public static EventDto buildForEvent(ZonedDateTime start, Event event) {
         var eventDto = new EventDto();

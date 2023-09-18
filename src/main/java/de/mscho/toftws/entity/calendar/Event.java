@@ -16,11 +16,11 @@ import java.util.Optional;
 public class Event extends AbstractTimedEntity {
     @PositiveOrZero
     public long duration;
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.ALL, optional = false)
     public EventContent content;
     @ManyToOne
     public EventCategory category;
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = {CascadeType.ALL})
     public Recurrence recurrence;
     @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
     public List<EventDeviation> deviations = new ArrayList<>();
@@ -65,5 +65,12 @@ public class Event extends AbstractTimedEntity {
         }
 
         return Optional.of(event);
+    }
+
+    public void fill(Event event) {
+        this.duration = event.duration;
+        this.content = event.content;
+        this.category = event.category;
+        this.recurrence = event.recurrence;
     }
 }

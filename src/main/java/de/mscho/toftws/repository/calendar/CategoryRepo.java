@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface CategoryRepo extends CrudRepository<EventCategory, Long> {
     Optional<EventCategory> findByIdAndUser(long id, User user);
     void deleteByIdAndUser(long id, User user);
+    boolean existsByIdAndUser(long id, User user);
 }

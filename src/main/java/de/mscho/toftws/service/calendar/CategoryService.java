@@ -47,4 +47,9 @@ public class CategoryService {
 
         logger.info("Deleted category: id:{} - removed category from events:{}", categoryId, events.stream().map(e -> e.id).toList());
     }
+
+    public boolean categoryExists(Long categoryId) {
+        var user = authenticationProvider.getAuthenticatedUser();
+        return categoryRepo.existsByIdAndUser(categoryId, user);
+    }
 }

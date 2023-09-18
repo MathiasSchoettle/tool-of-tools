@@ -1,5 +1,6 @@
 package de.mscho.toftws.entity.calendar.recurrence;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.Entity;
@@ -13,9 +14,10 @@ import java.util.List;
 @Entity
 public class MonthlyRecurrence extends Recurrence {
     @Positive
-    public int offset;
+    @NotNull
+    public long offset;
 
-    public MonthlyRecurrence(ZonedDateTime start, ZonedDateTime end, int offset) {
+    public MonthlyRecurrence(ZonedDateTime start, ZonedDateTime end, long offset) {
         super(start, end);
         this.offset = offset;
     }

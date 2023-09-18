@@ -2,9 +2,9 @@ package de.mscho.toftws.controller.calendar;
 
 import de.mscho.toftws.entity.calendar.payload.*;
 import de.mscho.toftws.service.calendar.CalendarService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.ZonedDateTime;
@@ -13,7 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("calendar/event")
 @RequiredArgsConstructor
-@Validated
 public class CalendarController {
     private final CalendarService calendarService;
 
@@ -22,28 +21,18 @@ public class CalendarController {
         return calendarService.getEvents(from, to);
     }
 
-    @DeleteMapping
-    public void deleteEvent(@RequestParam long id) {
-        calendarService.deleteEvent(id);
+    @DeleteMapping("/")
+    public void deleteEvent(@RequestParam long eventId) {
+        calendarService.deleteEvent(eventId);
     }
 
-    @PostMapping("daily")
-    public void createDailyEvent(@RequestBody OffsetEventRequest request) {
-        calendarService.createDailyEvent(request);
+    @PostMapping
+    public void createEvent(@RequestBody @Valid CalendarEventRequest request) {
+        calendarService.createEvent(request);
     }
 
-    @PostMapping("weekly")
-    public void createWeeklyEvent(@RequestBody WeeklyEventRequest request) {
-        calendarService.createWeeklyEvent(request);
-    }
-
-    @PostMapping("monthly")
-    public void createMonthlyEvent(@RequestBody OffsetEventRequest request) {
-        calendarService.createMonthlyEvent(request);
-    }
-
-    @PostMapping("yearly")
-    public void createYearlyEvent(@RequestBody EventRequest request) {
-        calendarService.createYearlyEvent(request);
+    @PutMapping
+    public void editEvent(@RequestParam long eventId, @RequestBody @Valid CalendarEventRequest request) {
+        calendarService.editEvent(eventId, request);
     }
 }

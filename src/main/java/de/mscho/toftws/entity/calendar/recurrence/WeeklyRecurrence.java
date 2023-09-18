@@ -1,6 +1,7 @@
 package de.mscho.toftws.entity.calendar.recurrence;
 
 import de.mscho.toftws.entity.calendar.util.DaySetConverters;
+import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.Convert;
@@ -21,12 +22,13 @@ import static java.time.temporal.TemporalAdjusters.nextOrSame;
 @Entity
 public class WeeklyRecurrence extends Recurrence {
     @Positive
-    public int offset;
+    @NotNull
+    public long offset;
     @Convert(converter = DaySetConverters.DaySetAttributeConverter.class)
     @NotEmpty
     public Set<DayOfWeek> weekDays;
 
-    public WeeklyRecurrence(ZonedDateTime start, ZonedDateTime end, int offset, Set<DayOfWeek> weekDays) {
+    public WeeklyRecurrence(ZonedDateTime start, ZonedDateTime end, long offset, Set<DayOfWeek> weekDays) {
         super(start, end);
         this.offset = offset;
         this.weekDays = weekDays;

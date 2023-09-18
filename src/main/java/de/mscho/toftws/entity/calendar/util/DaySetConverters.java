@@ -5,7 +5,8 @@ import com.fasterxml.jackson.databind.util.StdConverter;
 import jakarta.persistence.AttributeConverter;
 import java.time.DayOfWeek;
 import java.util.Arrays;
-import java.util.Set;
+import java.util.TreeSet;
+import java.util.SortedSet;
 import java.util.stream.Collectors;
 
 /**
@@ -13,21 +14,21 @@ import java.util.stream.Collectors;
  */
 public class DaySetConverters {
 
-    public static class DaySetConverter extends StdConverter<String, Set<DayOfWeek>> {
+    public static class DaySetConverter extends StdConverter<String, SortedSet<DayOfWeek>> {
         @Override
-        public Set<DayOfWeek> convert(String s) {
-            return Arrays.stream(s.split(",")).map(DayOfWeek::valueOf).collect(Collectors.toSet());
+        public SortedSet<DayOfWeek> convert(String s) {
+            return Arrays.stream(s.split(",")).map(DayOfWeek::valueOf).collect(Collectors.toCollection(TreeSet::new));
         }
     }
 
-    public static class DaySetAttributeConverter implements AttributeConverter<Set<DayOfWeek>, String> {
+    public static class DaySetAttributeConverter implements AttributeConverter<SortedSet<DayOfWeek>, String> {
         @Override
-        public String convertToDatabaseColumn(Set<DayOfWeek> days) {
+        public String convertToDatabaseColumn(SortedSet<DayOfWeek> days) {
             return days.stream().map(Enum::toString).collect(Collectors.joining(","));
         }
         @Override
-        public Set<DayOfWeek> convertToEntityAttribute(String s) {
-            return Arrays.stream(s.split(",")).map(DayOfWeek::valueOf).collect(Collectors.toSet());
+        public SortedSet<DayOfWeek> convertToEntityAttribute(String s) {
+            return Arrays.stream(s.split(",")).map(DayOfWeek::valueOf).collect(Collectors.toCollection(TreeSet::new));
         }
     }
 }
