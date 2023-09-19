@@ -2,7 +2,7 @@ package de.mscho.toftws.calendar.entity.payload;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import de.mscho.toftws.calendar.entity.util.DaySetConverters;
-import de.mscho.toftws.calendar.entity.util.EventRequestConstraint;
+import de.mscho.toftws.calendar.entity.util.EventRequestValidator;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -12,7 +12,7 @@ import java.time.DayOfWeek;
 import java.time.ZonedDateTime;
 import java.util.SortedSet;
 
-@EventRequestConstraint
+@EventRequestValidator.Constraint
 public class CalendarEventRequest {
     @NotNull
     public RecurrenceType type;

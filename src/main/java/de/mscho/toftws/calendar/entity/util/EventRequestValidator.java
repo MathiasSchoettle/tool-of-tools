@@ -4,23 +4,28 @@ import de.mscho.toftws.calendar.entity.payload.CalendarEventRequest;
 import de.mscho.toftws.calendar.service.CategoryService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import jakarta.validation.Payload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.HashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
 @Component
-public class EventRequestValidator implements ConstraintValidator<EventRequestConstraint, CalendarEventRequest> {
+public class EventRequestValidator implements ConstraintValidator<EventRequestValidator.Constraint, CalendarEventRequest> {
 
     private final CategoryService categoryService;
     private final String NOT_NECESSARY = "not necessary";
     private final String REQUIRED = "required";
 
     @Override
-    public void initialize(EventRequestConstraint constraintAnnotation) {
+    public void initialize(EventRequestValidator.Constraint constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
     }
 
@@ -102,5 +107,14 @@ public class EventRequestValidator implements ConstraintValidator<EventRequestCo
             errors.put("end", "must be after first occurrence");
 
         return errors;
+    }
+
+    @Target(ElementType.TYPE)
+    @Retention(RetentionPolicy.RUNTIME)
+    @jakarta.validation.Constraint(validatedBy = EventRequestValidator.class)
+    public @interface Constraint {
+        String message() default "Event request not valid";
+        Class<?>[] groups() default {};
+        Class<? extends Payload>[] payload() default {};
     }
 }
