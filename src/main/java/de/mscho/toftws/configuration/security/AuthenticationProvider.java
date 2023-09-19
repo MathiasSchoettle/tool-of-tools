@@ -1,7 +1,7 @@
 package de.mscho.toftws.configuration.security;
 
 
-import de.mscho.toftws.entity.user.User;
+import de.mscho.toftws.user.entity.User;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
