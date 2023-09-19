@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import de.mscho.toftws.calendar.entity.EventContent;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class EventContentDto {
     @NotBlank
     public String title;
@@ -14,8 +16,6 @@ public class EventContentDto {
     public String location;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public String link;
-
-    private EventContentDto() {}
 
     public static EventContentDto build(EventContent content) {
         var dto = new EventContentDto();
