@@ -16,6 +16,7 @@ import java.util.Optional;
 public class Event extends AbstractTimedEntity {
     @PositiveOrZero
     public long duration;
+    public boolean fullDay;
     @OneToOne(cascade = CascadeType.ALL, optional = false)
     public EventContent content;
     @ManyToOne

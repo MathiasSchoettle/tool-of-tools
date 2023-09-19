@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 
 import java.time.DayOfWeek;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.SortedSet;
 
@@ -19,6 +20,8 @@ public class CalendarEventRequest {
     @NotNull
     public ZonedDateTime start;
     public ZonedDateTime end;
+    @NotNull
+    public ZoneId zoneId;
     @NotNull
     @PositiveOrZero
     public Long duration;

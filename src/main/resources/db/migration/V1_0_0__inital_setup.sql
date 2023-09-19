@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS event
     id            INT      NOT NULL PRIMARY KEY AUTO_INCREMENT,
     created       DATETIME NOT NULL,
     duration      INT,
+    full_day      BIT,
     content_id    INT,
     category_id   INT,
     recurrence_id INT,

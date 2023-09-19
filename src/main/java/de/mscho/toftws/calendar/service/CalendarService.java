@@ -161,6 +161,7 @@ public class CalendarService {
         var event = new Event();
         event.content = request.content.toEntity();
         event.duration = request.duration;
+        event.fullDay = request.fullDay;
         event.recurrence = recurrence;
         event.user = authenticationProvider.getAuthenticatedUser();
 

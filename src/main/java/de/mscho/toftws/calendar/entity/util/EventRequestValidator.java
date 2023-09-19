@@ -13,6 +13,8 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +25,7 @@ public class EventRequestValidator implements ConstraintValidator<EventRequestVa
     private final CategoryService categoryService;
     private final String NOT_NECESSARY = "not necessary";
     private final String REQUIRED = "required";
+    private final ZoneId UTC = ZoneId.of("UTC");
 
     @Override
     public void initialize(EventRequestValidator.Constraint constraintAnnotation) {
@@ -43,6 +46,19 @@ public class EventRequestValidator implements ConstraintValidator<EventRequestVa
         if (!categoryService.categoryExists(request.categoryId)) {
             String NOT_FOUND = "not found";
             errors.put("categoryId", NOT_FOUND);
+        }
+
+        final long SECONDS_IN_UTC_DAY = 86_400L;
+
+        if (request.fullDay && request.end != null) {
+            if (!request.end.getZone().equals(UTC)) errors.put("end", "must be in timezone UTC for full day events");
+            if (!request.end.toLocalTime().equals(LocalTime.MIDNIGHT)) errors.put("end", "must be at start of day");
+        }
+
+        if (request.fullDay) {
+            if (!request.start.getZone().equals(UTC)) errors.put("start", "must be in timezone UTC for full day events");
+            if (!request.start.toLocalTime().equals(LocalTime.MIDNIGHT)) errors.put("start", "must be at start of day");
+            if (request.duration != SECONDS_IN_UTC_DAY) errors.put("duration", "must be a multiple of seconds in a day for full day events");
         }
 
         if (errors.isEmpty()) return true;

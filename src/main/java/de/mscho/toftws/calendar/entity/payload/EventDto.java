@@ -17,6 +17,8 @@ public class EventDto {
     public Long deviationId;
     public ZonedDateTime start;
     public long duration;
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    public Boolean fullDay;
     public EventContentDto content;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public String categoryName;
@@ -28,6 +30,7 @@ public class EventDto {
         eventDto.id = event.id;
         eventDto.start = start;
         eventDto.duration = event.duration;
+        if (event.fullDay) eventDto.fullDay = true;
         return eventDto.fillContentAndCategory(event.content, event.category);
     }
 
