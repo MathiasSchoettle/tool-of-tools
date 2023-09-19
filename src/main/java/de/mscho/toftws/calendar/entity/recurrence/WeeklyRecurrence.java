@@ -13,7 +13,7 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
 
 import static java.time.temporal.TemporalAdjusters.previousOrSame;
 import static java.time.temporal.TemporalAdjusters.nextOrSame;
@@ -26,9 +26,9 @@ public class WeeklyRecurrence extends Recurrence {
     public long offset;
     @Convert(converter = DaySetConverters.DaySetAttributeConverter.class)
     @NotEmpty
-    public Set<DayOfWeek> weekDays;
+    public SortedSet<DayOfWeek> weekDays;
 
-    public WeeklyRecurrence(ZonedDateTime start, ZonedDateTime end, long offset, Set<DayOfWeek> weekDays) {
+    public WeeklyRecurrence(ZonedDateTime start, ZonedDateTime end, long offset, SortedSet<DayOfWeek> weekDays) {
         super(start, end);
         this.offset = offset;
         this.weekDays = weekDays;
