@@ -79,7 +79,12 @@ public class EventRequestValidator implements ConstraintValidator<EventRequestCo
         var errors = validateDatesOrOccurrence(request);
 
         if (request.offset == null) errors.put("offset", REQUIRED);
-        if (CollectionUtils.isEmpty(request.weekDays)) errors.put("weekDays", REQUIRED);
+
+        if (CollectionUtils.isEmpty(request.weekDays)) {
+            errors.put("weekDays", REQUIRED);
+        } else if (!request.weekDays.contains(request.start.getDayOfWeek())) {
+            errors.put("weekDays", "does not contain weekday of start date");
+        }
 
         return errors;
     }

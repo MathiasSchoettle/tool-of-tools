@@ -24,6 +24,7 @@ public class CalendarEventRequest {
     public Long duration;
     @Positive
     public Long offset;
+    // TODO could we just use a json array instead of weird string parsing?
     @JsonDeserialize(converter = DaySetConverters.DaySetConverter.class)
     public SortedSet<DayOfWeek> weekDays;
     @Positive

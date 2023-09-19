@@ -1,12 +1,13 @@
 package de.mscho.toftws.calendar.entity.util;
 
 import com.fasterxml.jackson.databind.util.StdConverter;
-
 import jakarta.persistence.AttributeConverter;
+
 import java.time.DayOfWeek;
 import java.util.Arrays;
-import java.util.TreeSet;
+import java.util.List;
 import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 /**
@@ -14,10 +15,16 @@ import java.util.stream.Collectors;
  */
 public class DaySetConverters {
 
+    /**
+     * Will filter out invalid values
+     */
     public static class DaySetConverter extends StdConverter<String, SortedSet<DayOfWeek>> {
         @Override
         public SortedSet<DayOfWeek> convert(String s) {
-            return Arrays.stream(s.split(",")).map(DayOfWeek::valueOf).collect(Collectors.toCollection(TreeSet::new));
+            List<String> dayNames = Arrays.stream(s.split(",")).toList();
+            return Arrays.stream(DayOfWeek.values())
+                    .filter(dayOfWeek -> dayNames.contains(dayOfWeek.name()))
+                    .collect(Collectors.toCollection(TreeSet::new));
         }
     }
 

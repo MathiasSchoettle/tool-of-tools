@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.*;
 import java.util.Arrays;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -132,7 +133,7 @@ public class WeeklyRecurrenceTest {
         recurrence.weekDays = Arrays.stream(days.split(","))
                 .map(Integer::parseInt)
                 .map(DayOfWeek::of)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toCollection(TreeSet::new));
         recurrence.start = start;
         recurrence.end = end;
         return recurrence;
