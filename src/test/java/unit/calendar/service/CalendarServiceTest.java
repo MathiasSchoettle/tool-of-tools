@@ -22,6 +22,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static de.mscho.toftws.calendar.entity.payload.RecurrenceType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -41,12 +42,17 @@ public class CalendarServiceTest {
     @Test
     void test_CreateSingleEvent() {
         var start = LocalDateTime.of(2020, 2, 1, 12, 0);
-        var request = new CalendarEventRequest();
-
-        request.type = RecurrenceType.SINGLE;
-        request.start = ZonedDateTime.of(start, GERMAN_ZONE);
-        request.duration = 200L;
-        request.content = new EventContentDto();
+        var request = new CalendarEventRequest(
+                SINGLE,
+                ZonedDateTime.of(start, GERMAN_ZONE),
+                null,
+                GERMAN_ZONE,
+                200L,
+                null,
+                null,
+                new EventContentDto(),
+                null
+        );
 
         var event = service.getEventFromRequest(request);
         assertEquals(200L, event.duration);
@@ -63,14 +69,17 @@ public class CalendarServiceTest {
     void test_CreateEvent_With_EndDate() {
         var start = LocalDateTime.of(2020, 2, 1, 12, 0);
         var end = LocalDateTime.of(2020, 4, 1, 12, 0);
-        var request = new CalendarEventRequest();
-
-        request.type = RecurrenceType.DAILY;
-        request.start = ZonedDateTime.of(start, GERMAN_ZONE);
-        request.end = ZonedDateTime.of(end, GERMAN_ZONE);
-        request.duration = 200L;
-        request.content = new EventContentDto();
-        request.offset = 1L;
+        var request = new CalendarEventRequest(
+                DAILY,
+                ZonedDateTime.of(start, GERMAN_ZONE),
+                ZonedDateTime.of(end, GERMAN_ZONE),
+                GERMAN_ZONE,
+                200L,
+                1L,
+                null,
+                new EventContentDto(),
+                null
+        );
 
         var event = service.getEventFromRequest(request);
         assertEquals(200L, event.duration);
@@ -83,13 +92,17 @@ public class CalendarServiceTest {
     @Test
     void test_CreateEvent_With_NoEndDate() {
         var start = LocalDateTime.of(2020, 2, 1, 12, 0);
-        var request = new CalendarEventRequest();
-
-        request.type = RecurrenceType.DAILY;
-        request.start = ZonedDateTime.of(start, GERMAN_ZONE);
-        request.duration = 200L;
-        request.content = new EventContentDto();
-        request.offset = 1L;
+        var request = new CalendarEventRequest(
+                DAILY,
+                ZonedDateTime.of(start, GERMAN_ZONE),
+                null,
+                GERMAN_ZONE,
+                200L,
+                1L,
+                null,
+                new EventContentDto(),
+                null
+        );
 
         // is it really far in the future?
         var futureDate = LocalDateTime.of(5000, 1, 1, 0, 0);
@@ -100,14 +113,17 @@ public class CalendarServiceTest {
     @Test
     void test_CreateDailyEvent_With_Occurrences() {
         var start = LocalDateTime.of(2020, 2, 1, 12, 0);
-        var request = new CalendarEventRequest();
-
-        request.type = RecurrenceType.DAILY;
-        request.start = ZonedDateTime.of(start, GERMAN_ZONE);
-        request.occurrences = 4;
-        request.duration = 200L;
-        request.content = new EventContentDto();
-        request.offset = 1L;
+        var request = new CalendarEventRequest(
+                DAILY,
+                ZonedDateTime.of(start, GERMAN_ZONE),
+                null,
+                GERMAN_ZONE,
+                200L,
+                1L,
+                4,
+                new EventContentDto(),
+                null
+        );
 
         var event = service.getEventFromRequest(request);
         assertEquals(200L, event.duration);
@@ -123,14 +139,17 @@ public class CalendarServiceTest {
     @Test
     void test_CreateDailyEvent_With_Occurrences_And_Offset() {
         var start = LocalDateTime.of(2020, 2, 1, 12, 0);
-        var request = new CalendarEventRequest();
-
-        request.type = RecurrenceType.DAILY;
-        request.start = ZonedDateTime.of(start, GERMAN_ZONE);
-        request.occurrences = 4;
-        request.duration = 200L;
-        request.content = new EventContentDto();
-        request.offset = 4L;
+        var request = new CalendarEventRequest(
+                DAILY,
+                ZonedDateTime.of(start, GERMAN_ZONE),
+                null,
+                GERMAN_ZONE,
+                200L,
+                4L,
+                4,
+                new EventContentDto(),
+                null
+        );
 
         var event = service.getEventFromRequest(request);
         assertEquals(200L, event.duration);
@@ -146,15 +165,18 @@ public class CalendarServiceTest {
     @Test
     void test_CreateWeeklyEvent_With_Occurrences_And_StartDateIsFirstOccurrence() {
         var start = LocalDateTime.of(2023, 9, 4, 12, 0);
-        var request = new CalendarEventRequest();
-
-        request.type = RecurrenceType.WEEKLY;
-        request.start = ZonedDateTime.of(start, GERMAN_ZONE);
-        request.occurrences = 5;
-        request.duration = 200L;
+        var request = new CalendarEventRequest(
+                WEEKLY,
+                ZonedDateTime.of(start, GERMAN_ZONE),
+                null,
+                GERMAN_ZONE,
+                200L,
+                1L,
+                5,
+                new EventContentDto(),
+                null
+        );
         request.weekDays = Stream.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY).collect(Collectors.toCollection(TreeSet::new));
-        request.content = new EventContentDto();
-        request.offset = 1L;
 
         var event = service.getEventFromRequest(request);
         assertEquals(200L, event.duration);
@@ -170,15 +192,18 @@ public class CalendarServiceTest {
     @Test
     void test_CreateWeeklyEvent_With_Occurrences_And_StartDateNotFirstOccurrence() {
         var start = LocalDateTime.of(2023, 9, 7, 12, 0);
-        var request = new CalendarEventRequest();
-
-        request.type = RecurrenceType.WEEKLY;
-        request.start = ZonedDateTime.of(start, GERMAN_ZONE);
-        request.occurrences = 7;
-        request.duration = 200L;
+        var request = new CalendarEventRequest(
+                WEEKLY,
+                ZonedDateTime.of(start, GERMAN_ZONE),
+                null,
+                GERMAN_ZONE,
+                200L,
+                1L,
+                7,
+                new EventContentDto(),
+                null
+        );
         request.weekDays = Stream.of(DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY).collect(Collectors.toCollection(TreeSet::new));
-        request.content = new EventContentDto();
-        request.offset = 1L;
 
         var event = service.getEventFromRequest(request);
         assertEquals(200L, event.duration);
@@ -194,15 +219,18 @@ public class CalendarServiceTest {
     @Test
     void test_CreateWeeklyEvent_With_Occurrences_And_Offset_And_StartDateIsFirstOccurrence() {
         var start = LocalDateTime.of(2023, 9, 4, 12, 0);
-        var request = new CalendarEventRequest();
-
-        request.type = RecurrenceType.WEEKLY;
-        request.start = ZonedDateTime.of(start, GERMAN_ZONE);
-        request.occurrences = 5;
-        request.duration = 200L;
+        var request = new CalendarEventRequest(
+                WEEKLY,
+                ZonedDateTime.of(start, GERMAN_ZONE),
+                null,
+                GERMAN_ZONE,
+                200L,
+                3L,
+                5,
+                new EventContentDto(),
+                null
+        );
         request.weekDays = Stream.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY).collect(Collectors.toCollection(TreeSet::new));
-        request.content = new EventContentDto();
-        request.offset = 3L;
 
         var event = service.getEventFromRequest(request);
         assertEquals(200L, event.duration);
@@ -218,15 +246,18 @@ public class CalendarServiceTest {
     @Test
     void test_CreateWeeklyEvent_With_Occurrences_And_Offset_And_StartDateNotFirstOccurrence() {
         var start = LocalDateTime.of(2023, 9, 7, 12, 0);
-        var request = new CalendarEventRequest();
-
-        request.type = RecurrenceType.WEEKLY;
-        request.start = ZonedDateTime.of(start, GERMAN_ZONE);
-        request.occurrences = 8;
-        request.duration = 200L;
+        var request = new CalendarEventRequest(
+                WEEKLY,
+                ZonedDateTime.of(start, GERMAN_ZONE),
+                null,
+                GERMAN_ZONE,
+                200L,
+                2L,
+                8,
+                new EventContentDto(),
+                null
+        );
         request.weekDays = Stream.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY).collect(Collectors.toCollection(TreeSet::new));
-        request.content = new EventContentDto();
-        request.offset = 2L;
 
         var event = service.getEventFromRequest(request);
         assertEquals(200L, event.duration);
@@ -242,14 +273,17 @@ public class CalendarServiceTest {
     @Test
     void test_CreateMonthlyEvent_With_Occurrences() {
         var start = LocalDateTime.of(2020, 2, 1, 12, 0);
-        var request = new CalendarEventRequest();
-
-        request.type = RecurrenceType.MONTHLY;
-        request.start = ZonedDateTime.of(start, GERMAN_ZONE);
-        request.occurrences = 4;
-        request.duration = 200L;
-        request.content = new EventContentDto();
-        request.offset = 1L;
+        var request = new CalendarEventRequest(
+                MONTHLY,
+                ZonedDateTime.of(start, GERMAN_ZONE),
+                null,
+                GERMAN_ZONE,
+                200L,
+                1L,
+                4,
+                new EventContentDto(),
+                null
+        );
 
         var event = service.getEventFromRequest(request);
         assertEquals(200L, event.duration);
@@ -265,14 +299,17 @@ public class CalendarServiceTest {
     @Test
     void test_CreateMonthlyEvent_With_Occurrences_And_Offset() {
         var start = LocalDateTime.of(2020, 3, 5, 12, 0);
-        var request = new CalendarEventRequest();
-
-        request.type = RecurrenceType.MONTHLY;
-        request.start = ZonedDateTime.of(start, GERMAN_ZONE);
-        request.occurrences = 3;
-        request.duration = 200L;
-        request.content = new EventContentDto();
-        request.offset = 3L;
+        var request = new CalendarEventRequest(
+                MONTHLY,
+                ZonedDateTime.of(start, GERMAN_ZONE),
+                null,
+                GERMAN_ZONE,
+                200L,
+                3L,
+                3,
+                new EventContentDto(),
+                null
+        );
 
         var event = service.getEventFromRequest(request);
         assertEquals(200L, event.duration);
@@ -288,14 +325,17 @@ public class CalendarServiceTest {
     @Test
     void test_CreateYearlyEvent_With_Occurrences() {
         var start = LocalDateTime.of(1996, 8, 10, 12, 0);
-        var request = new CalendarEventRequest();
-
-        request.type = RecurrenceType.YEARLY;
-        request.start = ZonedDateTime.of(start, GERMAN_ZONE);
-        request.occurrences = 28;
-        request.duration = 0L;
-        request.content = new EventContentDto();
-        request.offset = 1L;
+        var request = new CalendarEventRequest(
+                YEARLY,
+                ZonedDateTime.of(start, GERMAN_ZONE),
+                null,
+                GERMAN_ZONE,
+                0L,
+                1L,
+                28,
+                new EventContentDto(),
+                null
+        );
 
         var event = service.getEventFromRequest(request);
         assertEquals(0L, event.duration);
@@ -311,14 +351,17 @@ public class CalendarServiceTest {
     @Test
     void test_CreateYearlyEvent_With_Occurrences_And_Offset() {
         var start = LocalDateTime.of(1996, 8, 10, 12, 0);
-        var request = new CalendarEventRequest();
-
-        request.type = RecurrenceType.YEARLY;
-        request.start = ZonedDateTime.of(start, GERMAN_ZONE);
-        request.occurrences = 4;
-        request.duration = 0L;
-        request.content = new EventContentDto();
-        request.offset = 5L;
+        var request = new CalendarEventRequest(
+                YEARLY,
+                ZonedDateTime.of(start, GERMAN_ZONE),
+                null,
+                GERMAN_ZONE,
+                0L,
+                5L,
+                4,
+                new EventContentDto(),
+                null
+        );
 
         var event = service.getEventFromRequest(request);
         assertEquals(0L, event.duration);
