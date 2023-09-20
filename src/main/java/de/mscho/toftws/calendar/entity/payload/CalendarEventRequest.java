@@ -38,4 +38,16 @@ public class CalendarEventRequest {
     public EventContentDto content;
     @NotNull
     public Long categoryId;
+
+    public CalendarEventRequest(RecurrenceType type, ZonedDateTime start, ZonedDateTime end, ZoneId zoneId, Long duration, Long offset, Integer occurrences, EventContentDto content, Long categoryId) {
+        this.type = type;
+        this.start = start;
+        this.end = end;
+        this.zoneId = zoneId;
+        this.duration = duration;
+        this.offset = offset;
+        this.occurrences = occurrences;
+        this.content = content;
+        this.categoryId = categoryId;
+    }
 }
