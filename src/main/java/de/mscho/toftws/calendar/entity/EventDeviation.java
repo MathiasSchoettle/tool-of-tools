@@ -3,14 +3,14 @@ package de.mscho.toftws.calendar.entity;
 import de.mscho.toftws.entity.AbstractTimedEntity;
 import jakarta.persistence.*;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 
 @Entity
 public class EventDeviation extends AbstractTimedEntity {
     @ManyToOne(optional = false)
     public Event event;
-    public ZonedDateTime oldOccurrence;
-    public ZonedDateTime newOccurrence;
+    public Instant oldOccurrence;
+    public Instant newOccurrence;
     public long duration;
     public boolean cancelled;
     @OneToOne(cascade = CascadeType.ALL)

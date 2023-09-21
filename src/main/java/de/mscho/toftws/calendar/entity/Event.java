@@ -51,7 +51,8 @@ public class Event extends AbstractTimedEntity {
      */
     private Optional<EventDto> buildEvent(ZonedDateTime current) {
         EventDto event;
-        var deviationOptional = deviations.stream().filter(d -> d.oldOccurrence.isEqual(current)).findFirst();
+        var deviationOptional = deviations.stream().
+                filter(d -> d.oldOccurrence.atZone(recurrence.zoneId).isEqual(current)).findFirst();
 
         if (deviationOptional.isPresent()) {
             var deviation = deviationOptional.get();

@@ -38,7 +38,7 @@ public class EventDto {
     public static EventDto buildForDeviation(long eventId, EventDeviation deviation, EventContent content, EventCategory category) {
         var eventDto = new EventDto();
         eventDto.id = eventId;
-        eventDto.start = deviation.newOccurrence.withZoneSameInstant(DateTimeUtils.UTC);
+        eventDto.start = deviation.newOccurrence.atZone(DateTimeUtils.UTC);
         eventDto.duration = deviation.duration;
         eventDto.deviationId = deviation.id;
         return eventDto.fillContentAndCategory(content, category);

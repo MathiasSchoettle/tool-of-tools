@@ -5,13 +5,13 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 
 public class DeviationRequest {
     @NotNull
-    public ZonedDateTime oldOccurrence;
+    public Instant oldOccurrence;
     @NotNull
-    public ZonedDateTime newOccurrence;
+    public Instant newOccurrence;
     @PositiveOrZero
     public long duration;
     public boolean cancelled;
