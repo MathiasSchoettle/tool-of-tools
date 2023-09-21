@@ -5,6 +5,9 @@ import jakarta.validation.constraints.Positive;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.Entity;
+
+import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -17,27 +20,33 @@ public class YearlyRecurrence extends Recurrence {
     @NotNull
     public long offset;
 
-    public YearlyRecurrence(ZonedDateTime start, ZonedDateTime end, long offset) {
-        super(start, end);
+    public YearlyRecurrence(Instant start, Instant end, ZoneId zoneId, long offset) {
+        super(start, end, zoneId);
         this.offset = offset;
     }
 
     @Override
-    public List<ZonedDateTime> generateOccurrences(ZonedDateTime from, ZonedDateTime to) {
+    public List<ZonedDateTime> generateOccurrences(Instant from, Instant to) {
         var occurrences = new ArrayList<ZonedDateTime>();
-        var addedYears = yearsToAdd(from);
-        var current = start.plusYears(addedYears);
+        var zonedStart = start.atZone(zoneId);
 
-        while (current.isBefore(to) && current.isBefore(end)) {
+        var addedYears = yearsToAdd(from.atZone(zoneId));
+        var current = zonedStart.plusYears(addedYears);
+
+        while (current.toInstant().isBefore(to) && current.isBefore(end.atZone(zoneId))) {
             occurrences.add(current);
-            current = start.plusYears(++addedYears);
+            addedYears += offset;
+            current = zonedStart.plusYears(addedYears);
         }
 
         return occurrences;
     }
 
     private long yearsToAdd(ZonedDateTime from) {
-        if (start.isAfter(from)) return 0;
-        return start.until(from.minusNanos(1), ChronoUnit.YEARS) + 1;
+        var zonedStart = start.atZone(zoneId);
+        if (zonedStart.isAfter(from)) return 0;
+
+        long yearsBetween = zonedStart.until(from.minusNanos(1), ChronoUnit.YEARS);
+        return (yearsBetween / offset + 1) * offset;
     }
 }

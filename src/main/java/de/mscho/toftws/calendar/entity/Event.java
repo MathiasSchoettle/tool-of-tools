@@ -7,6 +7,8 @@ import de.mscho.toftws.user.entity.User;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.PositiveOrZero;
+
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +34,7 @@ public class Event extends AbstractTimedEntity {
      *  Generate eventDto objects from this event which occur between the given timeframe.
      *  Takes care of cancelled or edited events.
      */
-    public List<EventDto> getEvents(ZonedDateTime from, ZonedDateTime to) {
+    public List<EventDto> getEvents(Instant from, Instant to) {
         var events = new ArrayList<EventDto>();
 
         for (ZonedDateTime current : recurrence.generateOccurrences(from, to)) {

@@ -8,9 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 
-import java.time.DayOfWeek;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.SortedSet;
 
 @EventRequestValidator.Constraint
@@ -18,8 +16,8 @@ public class CalendarEventRequest {
     @NotNull
     public RecurrenceType type;
     @NotNull
-    public ZonedDateTime start;
-    public ZonedDateTime end;
+    public Instant start;
+    public Instant end;
     @NotNull
     public ZoneId zoneId;
     @NotNull
@@ -39,7 +37,7 @@ public class CalendarEventRequest {
     @NotNull
     public Long categoryId;
 
-    public CalendarEventRequest(RecurrenceType type, ZonedDateTime start, ZonedDateTime end, ZoneId zoneId, Long duration, Long offset, Integer occurrences, EventContentDto content, Long categoryId) {
+    public CalendarEventRequest(RecurrenceType type, Instant start, Instant end, ZoneId zoneId, Long duration, Long offset, Integer occurrences, EventContentDto content, Long categoryId) {
         this.type = type;
         this.start = start;
         this.end = end;

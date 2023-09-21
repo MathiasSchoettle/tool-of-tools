@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS event
     created       DATETIME NOT NULL,
     duration      INT,
     full_day      BIT,
+    zone_id       varchar(64),
     content_id    INT,
     category_id   INT,
     recurrence_id INT,

@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.Positive;
+
+import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -17,30 +20,34 @@ public class MonthlyRecurrence extends Recurrence {
     @NotNull
     public long offset;
 
-    public MonthlyRecurrence(ZonedDateTime start, ZonedDateTime end, long offset) {
-        super(start, end);
+    public MonthlyRecurrence(Instant start, Instant end, ZoneId zoneId, long offset) {
+        super(start, end, zoneId);
         this.offset = offset;
     }
 
     @Override
-    public List<ZonedDateTime> generateOccurrences(ZonedDateTime from, ZonedDateTime to) {
+    public List<ZonedDateTime> generateOccurrences(Instant from, Instant to) {
         var occurrences = new ArrayList<ZonedDateTime>();
-        long addedMonths = monthsToAdd(from);
-        var current = start.plusMonths(addedMonths);
+        var zonedStart = start.atZone(zoneId);
 
-        while (current.isBefore(to) && current.isBefore(end)) {
+        long addedMonths = monthsToAdd(from.atZone(zoneId));
+
+        var current = zonedStart.plusMonths(addedMonths);
+
+        while (current.toInstant().isBefore(to) && current.isBefore(end.atZone(zoneId))) {
             occurrences.add(current);
             addedMonths += offset;
-            current = start.plusMonths(addedMonths);
+            current = zonedStart.plusMonths(addedMonths);
         }
 
         return occurrences;
     }
 
     private long monthsToAdd(ZonedDateTime from) {
-        if (from.isBefore(start)) return 0;
+        var zonedStart = start.atZone(zoneId);
+        if (from.isBefore(zonedStart)) return 0;
         // the amount of months we need to add to land on a date after from
-        long monthsToFirst = start.until(from.minusNanos(1), ChronoUnit.MONTHS) + 1;
+        long monthsToFirst = zonedStart.until(from.minusNanos(1), ChronoUnit.MONTHS) + 1;
         // if we have an offset we need our months to add to be a multiple of it
         return ((monthsToFirst + offset - 1) / offset) * offset;
     }

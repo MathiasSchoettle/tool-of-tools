@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
 
 import jakarta.validation.constraints.Positive;
+
+import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -18,17 +21,18 @@ public class DailyRecurrence extends Recurrence {
     @NotNull
     public long offset;
 
-    public DailyRecurrence(ZonedDateTime start, ZonedDateTime end, long offset) {
-        super(start, end);
+    public DailyRecurrence(Instant start, Instant end, ZoneId zoneId, long offset) {
+        super(start, end, zoneId);
         this.offset = offset;
     }
 
     @Override
-    public List<ZonedDateTime> generateOccurrences(ZonedDateTime from, ZonedDateTime to) {
+    public List<ZonedDateTime> generateOccurrences(Instant from, Instant to) {
         var occurrences = new ArrayList<ZonedDateTime>();
         var current = firstOccurrence(from);
+        var zonedEnd = end.atZone(zoneId);
 
-        while (current.isBefore(to) && current.isBefore(end)) {
+        while (current.toInstant().isBefore(to) && current.isBefore(zonedEnd)) {
             occurrences.add(current);
             current = current.plusDays(offset);
         }
@@ -36,14 +40,16 @@ public class DailyRecurrence extends Recurrence {
         return occurrences;
     }
 
-    private ZonedDateTime firstOccurrence(ZonedDateTime from) {
-        if (!from.isAfter(start)) return start;
+    private ZonedDateTime firstOccurrence(Instant from) {
+        var zonedStart = start.atZone(zoneId);
+
+        if (!from.isAfter(start)) return zonedStart;
 
         // minus one nano to catch cases where from date is a valid occurrence
-        long daysBetween = start.until(from.minusNanos(1), ChronoUnit.DAYS);
+        long daysBetween = zonedStart.until(from.atZone(zoneId).minusNanos(1), ChronoUnit.DAYS);
         // compensate by adding one more offset
         long daysToAdd = (daysBetween / offset + 1) * offset;
 
-        return start.plusDays(daysToAdd);
+        return zonedStart.plusDays(daysToAdd);
     }
 }

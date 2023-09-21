@@ -3,6 +3,8 @@ package de.mscho.toftws.calendar.entity.recurrence;
 import jakarta.persistence.Entity;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,14 +13,14 @@ import java.util.List;
 @Entity
 public class SingleRecurrence extends Recurrence {
 
-    public SingleRecurrence(ZonedDateTime start, ZonedDateTime end) {
-        super(start, end);
+    public SingleRecurrence(Instant start, Instant end, ZoneId zoneId) {
+        super(start, end, zoneId);
     }
 
     @Override
-    public List<ZonedDateTime> generateOccurrences(ZonedDateTime from, ZonedDateTime to) {
+    public List<ZonedDateTime> generateOccurrences(Instant from, Instant to) {
         if (!start.isBefore(from) && start.isBefore(to)) {
-            return List.of(start);
+            return List.of(start.atZone(zoneId));
         }
         return new ArrayList<>();
     }

@@ -14,10 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -39,143 +36,97 @@ public class CalendarServiceTest {
 
     static ZoneId GERMAN_ZONE = ZoneId.of("Europe/Berlin");
 
-    @Test
-    void test_CreateSingleEvent() {
-        var start = LocalDateTime.of(2020, 2, 1, 12, 0);
-        var request = new CalendarEventRequest(
-                SINGLE,
-                ZonedDateTime.of(start, GERMAN_ZONE),
-                null,
-                GERMAN_ZONE,
-                200L,
-                null,
-                null,
+    CalendarEventRequest create(RecurrenceType type, Instant start, Instant end, ZoneId zoneId, Integer duration, Integer offset, Integer occurrences) {
+        return new CalendarEventRequest(
+                type,
+                start,
+                end,
+                zoneId,
+                duration == null ? null : duration.longValue(),
+                offset == null ? null : offset.longValue(),
+                occurrences,
                 new EventContentDto(),
                 null
         );
+    }
+
+    @Test
+    void test_CreateSingleEvent() {
+        var start = instant(LocalDateTime.of(2020, 2, 1, 12, 0));
+        var request = create(SINGLE, start, null, GERMAN_ZONE, 200, null, null);
 
         var event = service.getEventFromRequest(request);
         assertEquals(200L, event.duration);
 
         var recurrence = event.recurrence;
         assertEquals(SingleRecurrence.class, recurrence.getClass());
-        assertEquals(recurrence.start, ZonedDateTime.of(start, GERMAN_ZONE));
+        assertEquals(start, recurrence.start);
 
-        var end = LocalDateTime.of(2020, 2, 1, 12, 3, 20);
-        assertEquals(ZonedDateTime.of(end, GERMAN_ZONE), recurrence.end);
+        var end = instant(LocalDateTime.of(2020, 2, 1, 12, 3, 20));
+        assertEquals(end, recurrence.end);
     }
 
     @Test
     void test_CreateEvent_With_EndDate() {
-        var start = LocalDateTime.of(2020, 2, 1, 12, 0);
-        var end = LocalDateTime.of(2020, 4, 1, 12, 0);
-        var request = new CalendarEventRequest(
-                DAILY,
-                ZonedDateTime.of(start, GERMAN_ZONE),
-                ZonedDateTime.of(end, GERMAN_ZONE),
-                GERMAN_ZONE,
-                200L,
-                1L,
-                null,
-                new EventContentDto(),
-                null
-        );
+        var start = instant(LocalDateTime.of(2020, 2, 1, 12, 0));
+        var end = instant(LocalDateTime.of(2020, 4, 1, 12, 0));
+        var request = create(DAILY, start, end, GERMAN_ZONE, 200, 1, null);
 
         var event = service.getEventFromRequest(request);
         assertEquals(200L, event.duration);
 
         var recurrence = event.recurrence;
-        assertEquals(recurrence.start, ZonedDateTime.of(start, GERMAN_ZONE));
-        assertEquals(ZonedDateTime.of(end, GERMAN_ZONE), recurrence.end);
+        assertEquals(start, recurrence.start);
+        assertEquals(end, recurrence.end);
     }
 
     @Test
     void test_CreateEvent_With_NoEndDate() {
-        var start = LocalDateTime.of(2020, 2, 1, 12, 0);
-        var request = new CalendarEventRequest(
-                DAILY,
-                ZonedDateTime.of(start, GERMAN_ZONE),
-                null,
-                GERMAN_ZONE,
-                200L,
-                1L,
-                null,
-                new EventContentDto(),
-                null
-        );
+        var start = instant(LocalDateTime.of(2020, 2, 1, 12, 0));
+        var request = create(DAILY, start, null, GERMAN_ZONE, 200, 1, null);
 
         // is it really far in the future?
-        var futureDate = LocalDateTime.of(5000, 1, 1, 0, 0);
+        var futureDate = instant(LocalDateTime.of(5000, 1, 1, 0, 0));
         var event = service.getEventFromRequest(request);
-        assertTrue(event.recurrence.end.isAfter(ZonedDateTime.of(futureDate, GERMAN_ZONE)));
+        assertTrue(event.recurrence.end.isAfter(futureDate));
     }
 
     @Test
     void test_CreateDailyEvent_With_Occurrences() {
-        var start = LocalDateTime.of(2020, 2, 1, 12, 0);
-        var request = new CalendarEventRequest(
-                DAILY,
-                ZonedDateTime.of(start, GERMAN_ZONE),
-                null,
-                GERMAN_ZONE,
-                200L,
-                1L,
-                4,
-                new EventContentDto(),
-                null
-        );
+        var start = instant(LocalDateTime.of(2020, 2, 1, 12, 0));
+        var request = create(DAILY, start, null, GERMAN_ZONE, 200, 1, 4);
 
         var event = service.getEventFromRequest(request);
         assertEquals(200L, event.duration);
 
         var recurrence = event.recurrence;
         assertEquals(DailyRecurrence.class, recurrence.getClass());
-        assertEquals(recurrence.start, ZonedDateTime.of(start, GERMAN_ZONE));
+        assertEquals(start, recurrence.start);
 
-        var end = LocalDateTime.of(2020, 2, 4, 12, 3, 20);
-        assertEquals(ZonedDateTime.of(end, GERMAN_ZONE), recurrence.end);
+        var end = instant(LocalDateTime.of(2020, 2, 4, 12, 3, 20));
+        assertEquals(end, recurrence.end);
     }
 
     @Test
     void test_CreateDailyEvent_With_Occurrences_And_Offset() {
-        var start = LocalDateTime.of(2020, 2, 1, 12, 0);
-        var request = new CalendarEventRequest(
-                DAILY,
-                ZonedDateTime.of(start, GERMAN_ZONE),
-                null,
-                GERMAN_ZONE,
-                200L,
-                4L,
-                4,
-                new EventContentDto(),
-                null
-        );
+        var start = instant(LocalDateTime.of(2020, 2, 1, 12, 0));
+        var request = create(DAILY, start, null, GERMAN_ZONE, 200, 4, 4);
 
         var event = service.getEventFromRequest(request);
         assertEquals(200L, event.duration);
 
         var recurrence = event.recurrence;
         assertEquals(DailyRecurrence.class, recurrence.getClass());
-        assertEquals(recurrence.start, ZonedDateTime.of(start, GERMAN_ZONE));
+        assertEquals(start, recurrence.start);
 
-        var end = LocalDateTime.of(2020, 2, 13, 12, 3, 20);
-        assertEquals(ZonedDateTime.of(end, GERMAN_ZONE), recurrence.end);
+        var end = instant(LocalDateTime.of(2020, 2, 13, 12, 3, 20));
+        assertEquals(end, recurrence.end);
     }
 
     @Test
     void test_CreateWeeklyEvent_With_Occurrences_And_StartDateIsFirstOccurrence() {
-        var start = LocalDateTime.of(2023, 9, 4, 12, 0);
-        var request = new CalendarEventRequest(
-                WEEKLY,
-                ZonedDateTime.of(start, GERMAN_ZONE),
-                null,
-                GERMAN_ZONE,
-                200L,
-                1L,
-                5,
-                new EventContentDto(),
-                null
-        );
+        var start = instant(LocalDateTime.of(2023, 9, 4, 12, 0));
+        var request = create(WEEKLY, start, null, GERMAN_ZONE, 200, 1, 5);
         request.weekDays = Stream.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY).collect(Collectors.toCollection(TreeSet::new));
 
         var event = service.getEventFromRequest(request);
@@ -183,26 +134,16 @@ public class CalendarServiceTest {
 
         var recurrence = event.recurrence;
         assertEquals(WeeklyRecurrence.class, recurrence.getClass());
-        assertEquals(recurrence.start, ZonedDateTime.of(start, GERMAN_ZONE));
+        assertEquals(start, recurrence.start);
 
-        var end = LocalDateTime.of(2023, 9, 18, 12, 3, 20);
-        assertEquals(ZonedDateTime.of(end, GERMAN_ZONE), recurrence.end);
+        var end = instant(LocalDateTime.of(2023, 9, 18, 12, 3, 20));
+        assertEquals(end, recurrence.end);
     }
 
     @Test
     void test_CreateWeeklyEvent_With_Occurrences_And_StartDateNotFirstOccurrence() {
-        var start = LocalDateTime.of(2023, 9, 7, 12, 0);
-        var request = new CalendarEventRequest(
-                WEEKLY,
-                ZonedDateTime.of(start, GERMAN_ZONE),
-                null,
-                GERMAN_ZONE,
-                200L,
-                1L,
-                7,
-                new EventContentDto(),
-                null
-        );
+        var start = instant(LocalDateTime.of(2023, 9, 7, 12, 0));
+        var request = create(WEEKLY, start, null, GERMAN_ZONE, 200, 1, 7);
         request.weekDays = Stream.of(DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY).collect(Collectors.toCollection(TreeSet::new));
 
         var event = service.getEventFromRequest(request);
@@ -210,26 +151,16 @@ public class CalendarServiceTest {
 
         var recurrence = event.recurrence;
         assertEquals(WeeklyRecurrence.class, recurrence.getClass());
-        assertEquals(recurrence.start, ZonedDateTime.of(start, GERMAN_ZONE));
+        assertEquals(start, recurrence.start);
 
-        var end = LocalDateTime.of(2023, 9, 21, 12, 3, 20);
-        assertEquals(ZonedDateTime.of(end, GERMAN_ZONE), recurrence.end);
+        var end = instant(LocalDateTime.of(2023, 9, 21, 12, 3, 20));
+        assertEquals(end, recurrence.end);
     }
 
     @Test
     void test_CreateWeeklyEvent_With_Occurrences_And_Offset_And_StartDateIsFirstOccurrence() {
-        var start = LocalDateTime.of(2023, 9, 4, 12, 0);
-        var request = new CalendarEventRequest(
-                WEEKLY,
-                ZonedDateTime.of(start, GERMAN_ZONE),
-                null,
-                GERMAN_ZONE,
-                200L,
-                3L,
-                5,
-                new EventContentDto(),
-                null
-        );
+        var start = instant(LocalDateTime.of(2023, 9, 4, 12, 0));
+        var request = create(WEEKLY, start, null, GERMAN_ZONE, 200, 3, 5);
         request.weekDays = Stream.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY).collect(Collectors.toCollection(TreeSet::new));
 
         var event = service.getEventFromRequest(request);
@@ -237,26 +168,16 @@ public class CalendarServiceTest {
 
         var recurrence = event.recurrence;
         assertEquals(WeeklyRecurrence.class, recurrence.getClass());
-        assertEquals(recurrence.start, ZonedDateTime.of(start, GERMAN_ZONE));
+        assertEquals(start, recurrence.start);
 
-        var end = LocalDateTime.of(2023, 10, 16, 12, 3, 20);
-        assertEquals(ZonedDateTime.of(end, GERMAN_ZONE), recurrence.end);
+        var end = instant(LocalDateTime.of(2023, 10, 16, 12, 3, 20));
+        assertEquals(end, recurrence.end);
     }
 
     @Test
     void test_CreateWeeklyEvent_With_Occurrences_And_Offset_And_StartDateNotFirstOccurrence() {
-        var start = LocalDateTime.of(2023, 9, 7, 12, 0);
-        var request = new CalendarEventRequest(
-                WEEKLY,
-                ZonedDateTime.of(start, GERMAN_ZONE),
-                null,
-                GERMAN_ZONE,
-                200L,
-                2L,
-                8,
-                new EventContentDto(),
-                null
-        );
+        var start = instant(LocalDateTime.of(2023, 9, 7, 12, 0));
+        var request = create(WEEKLY, start, null, GERMAN_ZONE, 200, 2, 8);
         request.weekDays = Stream.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY).collect(Collectors.toCollection(TreeSet::new));
 
         var event = service.getEventFromRequest(request);
@@ -264,113 +185,77 @@ public class CalendarServiceTest {
 
         var recurrence = event.recurrence;
         assertEquals(WeeklyRecurrence.class, recurrence.getClass());
-        assertEquals(recurrence.start, ZonedDateTime.of(start, GERMAN_ZONE));
+        assertEquals(start, recurrence.start);
 
-        var end = LocalDateTime.of(2023, 10, 16, 12, 3, 20);
-        assertEquals(ZonedDateTime.of(end, GERMAN_ZONE), recurrence.end);
+        var end = instant(LocalDateTime.of(2023, 10, 16, 12, 3, 20));
+        assertEquals(end, recurrence.end);
     }
 
     @Test
     void test_CreateMonthlyEvent_With_Occurrences() {
-        var start = LocalDateTime.of(2020, 2, 1, 12, 0);
-        var request = new CalendarEventRequest(
-                MONTHLY,
-                ZonedDateTime.of(start, GERMAN_ZONE),
-                null,
-                GERMAN_ZONE,
-                200L,
-                1L,
-                4,
-                new EventContentDto(),
-                null
-        );
+        var start = instant(LocalDateTime.of(2020, 2, 1, 12, 0));
+        var request = create(MONTHLY, start, null, GERMAN_ZONE, 200, 1, 4);
 
         var event = service.getEventFromRequest(request);
         assertEquals(200L, event.duration);
 
         var recurrence = event.recurrence;
         assertEquals(MonthlyRecurrence.class, recurrence.getClass());
-        assertEquals(recurrence.start, ZonedDateTime.of(start, GERMAN_ZONE));
+        assertEquals(start, recurrence.start);
 
-        var end = LocalDateTime.of(2020, 5, 1, 12, 3, 20);
-        assertEquals(ZonedDateTime.of(end, GERMAN_ZONE), recurrence.end);
+        var end = instant(LocalDateTime.of(2020, 5, 1, 12, 3, 20));
+        assertEquals(end, recurrence.end);
     }
 
     @Test
     void test_CreateMonthlyEvent_With_Occurrences_And_Offset() {
-        var start = LocalDateTime.of(2020, 3, 5, 12, 0);
-        var request = new CalendarEventRequest(
-                MONTHLY,
-                ZonedDateTime.of(start, GERMAN_ZONE),
-                null,
-                GERMAN_ZONE,
-                200L,
-                3L,
-                3,
-                new EventContentDto(),
-                null
-        );
+        var start = instant(LocalDateTime.of(2020, 3, 5, 12, 0));
+        var request = create(MONTHLY, start, null, GERMAN_ZONE, 200, 3, 3);
 
         var event = service.getEventFromRequest(request);
         assertEquals(200L, event.duration);
 
         var recurrence = event.recurrence;
         assertEquals(MonthlyRecurrence.class, recurrence.getClass());
-        assertEquals(recurrence.start, ZonedDateTime.of(start, GERMAN_ZONE));
+        assertEquals(start, recurrence.start);
 
-        var end = LocalDateTime.of(2020, 9, 5, 12, 3, 20);
-        assertEquals(ZonedDateTime.of(end, GERMAN_ZONE), recurrence.end);
+        var end = instant(LocalDateTime.of(2020, 9, 5, 12, 3, 20));
+        assertEquals(end, recurrence.end);
     }
 
     @Test
     void test_CreateYearlyEvent_With_Occurrences() {
-        var start = LocalDateTime.of(1996, 8, 10, 12, 0);
-        var request = new CalendarEventRequest(
-                YEARLY,
-                ZonedDateTime.of(start, GERMAN_ZONE),
-                null,
-                GERMAN_ZONE,
-                0L,
-                1L,
-                28,
-                new EventContentDto(),
-                null
-        );
+        var start = instant(LocalDateTime.of(1996, 8, 10, 12, 0));
+        var request = create(YEARLY, start, null, GERMAN_ZONE, 0, 1, 28);
 
         var event = service.getEventFromRequest(request);
         assertEquals(0L, event.duration);
 
         var recurrence = event.recurrence;
         assertEquals(YearlyRecurrence.class, recurrence.getClass());
-        assertEquals(recurrence.start, ZonedDateTime.of(start, GERMAN_ZONE));
+        assertEquals(start, recurrence.start);
 
-        var end = LocalDateTime.of(2023, 8, 10, 12, 0, 0);
-        assertEquals(ZonedDateTime.of(end, GERMAN_ZONE), recurrence.end);
+        var end = instant(LocalDateTime.of(2023, 8, 10, 12, 0, 0));
+        assertEquals(end, recurrence.end);
     }
 
     @Test
     void test_CreateYearlyEvent_With_Occurrences_And_Offset() {
-        var start = LocalDateTime.of(1996, 8, 10, 12, 0);
-        var request = new CalendarEventRequest(
-                YEARLY,
-                ZonedDateTime.of(start, GERMAN_ZONE),
-                null,
-                GERMAN_ZONE,
-                0L,
-                5L,
-                4,
-                new EventContentDto(),
-                null
-        );
+        var start = instant(LocalDateTime.of(1996, 8, 10, 12, 0));
+        var request = create(YEARLY, start, null, GERMAN_ZONE, 0, 5, 4);
 
         var event = service.getEventFromRequest(request);
         assertEquals(0L, event.duration);
 
         var recurrence = event.recurrence;
         assertEquals(YearlyRecurrence.class, recurrence.getClass());
-        assertEquals(recurrence.start, ZonedDateTime.of(start, GERMAN_ZONE));
+        assertEquals(start, recurrence.start);
 
-        var end = LocalDateTime.of(2011, 8, 10, 12, 0, 0);
-        assertEquals(ZonedDateTime.of(end, GERMAN_ZONE), recurrence.end);
+        var end = instant(LocalDateTime.of(2011, 8, 10, 12, 0, 0));
+        assertEquals(end, recurrence.end);
+    }
+
+    Instant instant(LocalDateTime dateTime) {
+        return dateTime.atZone(GERMAN_ZONE).toInstant();
     }
 }

@@ -5,6 +5,7 @@ import de.mscho.toftws.calendar.entity.Event;
 import de.mscho.toftws.calendar.entity.EventCategory;
 import de.mscho.toftws.calendar.entity.EventContent;
 import de.mscho.toftws.calendar.entity.EventDeviation;
+import de.mscho.toftws.utils.DateTimeUtils;
 import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
@@ -28,7 +29,7 @@ public class EventDto {
     public static EventDto buildForEvent(ZonedDateTime start, Event event) {
         var eventDto = new EventDto();
         eventDto.id = event.id;
-        eventDto.start = start;
+        eventDto.start = start.withZoneSameInstant(DateTimeUtils.UTC);
         eventDto.duration = event.duration;
         if (event.fullDay) eventDto.fullDay = true;
         return eventDto.fillContentAndCategory(event.content, event.category);
@@ -37,7 +38,7 @@ public class EventDto {
     public static EventDto buildForDeviation(long eventId, EventDeviation deviation, EventContent content, EventCategory category) {
         var eventDto = new EventDto();
         eventDto.id = eventId;
-        eventDto.start = deviation.newOccurrence;
+        eventDto.start = deviation.newOccurrence.withZoneSameInstant(DateTimeUtils.UTC);
         eventDto.duration = deviation.duration;
         eventDto.deviationId = deviation.id;
         return eventDto.fillContentAndCategory(content, category);

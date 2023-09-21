@@ -4,24 +4,19 @@ import de.mscho.toftws.calendar.entity.recurrence.MonthlyRecurrence;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Tag("unit")
 public class MonthlyRecurrenceTest {
-    private static final ZoneId CET = ZoneId.of("CET");
-
     @Test
     void testInTimeFrame() {
-        var from = dayMonthHour(1, 1, 0);
-        var to = dayMonthHour(5, 1, 23);
+        var from = instant(1, 1, 0);
+        var to = instant(5, 1, 23);
 
-        var start = dayMonthHour(1, 14, 9);
-        var end = dayMonthHour(3, 30, 12);
+        var start = instant(1, 14, 9);
+        var end = instant(3, 30, 12);
 
         var rec = recurrence(1, start, end);
         var list = rec.generateOccurrences(from, to);
@@ -33,27 +28,27 @@ public class MonthlyRecurrenceTest {
 
     @Test
     void testStartOutsideOfTimeframe() {
-        var from = dayMonthHour(10, 2, 0).withYear(2022);
-        var to = dayMonthHour(11, 30, 23).withYear(2022);
+        var from = instant(10, 2, 0);
+        var to = instant(11, 30, 23);
 
-        var start = dayMonthHour(9, 9, 9).withYear(2022);
-        var end = dayMonthHour(11, 30, 12).withYear(2022);
+        var start = instant(9, 9, 9);
+        var end = instant(11, 30, 12);
 
         var rec = recurrence(1, start, end);
         var list = rec.generateOccurrences(from, to);
 
-        assertEquals(DayOfWeek.SUNDAY, list.get(0).getDayOfWeek());
-        assertEquals(DayOfWeek.WEDNESDAY, list.get(1).getDayOfWeek());
+        assertEquals(DayOfWeek.MONDAY, list.get(0).getDayOfWeek());
+        assertEquals(DayOfWeek.THURSDAY, list.get(1).getDayOfWeek());
         assertEquals(2, list.size());
     }
 
     @Test
     void testEndOutsideOfTimeFrame() {
-        var from = dayMonthHour(4, 3, 0);
-        var to = dayMonthHour(7, 30, 23);
+        var from = instant(4, 3, 0);
+        var to = instant(7, 30, 23);
 
-        var start = dayMonthHour(4, 25, 9);
-        var end = dayMonthHour(9, 30, 12);
+        var start = instant(4, 25, 9);
+        var end = instant(9, 30, 12);
 
         var rec = recurrence(1, start, end);
         var list = rec.generateOccurrences(from, to);
@@ -65,11 +60,11 @@ public class MonthlyRecurrenceTest {
 
     @Test
     void testOutsideOfTimeFrame() {
-        var from = dayMonthHour(2, 2, 0);
-        var to = dayMonthHour(4, 3, 23);
+        var from = instant(2, 2, 0);
+        var to = instant(4, 3, 23);
 
-        var start = dayMonthHour(1, 1, 9);
-        var end = dayMonthHour(7, 30, 12);
+        var start = instant(1, 1, 9);
+        var end = instant(7, 30, 12);
 
         var rec = recurrence(1, start, end);
         var list = rec.generateOccurrences(from, to);
@@ -81,11 +76,11 @@ public class MonthlyRecurrenceTest {
 
     @Test
     void testNoOccurrences() {
-        var from = dayMonthHour(2, 2, 0);
-        var to = dayMonthHour(2, 27, 23);
+        var from = instant(2, 2, 0);
+        var to = instant(2, 27, 23);
 
-        var start = dayMonthHour(1, 1, 9);
-        var end = dayMonthHour(7, 30, 12);
+        var start = instant(1, 1, 9);
+        var end = instant(7, 30, 12);
 
         var rec = recurrence(1, start, end);
         var list = rec.generateOccurrences(from, to);
@@ -95,11 +90,11 @@ public class MonthlyRecurrenceTest {
 
     @Test
     void testWithOffset() {
-        var from = dayMonthHour(3, 1, 0);
-        var to = dayMonthHour(9, 1, 23);
+        var from = instant(3, 1, 0);
+        var to = instant(9, 1, 23);
 
-        var start = dayMonthHour(2, 1, 9);
-        var end = dayMonthHour(9, 30, 12);
+        var start = instant(2, 1, 9);
+        var end = instant(9, 30, 12);
 
         var rec = recurrence(3, start, end);
         var list = rec.generateOccurrences(from, to);
@@ -111,11 +106,11 @@ public class MonthlyRecurrenceTest {
 
     @Test
     void testFromIsValidOccurrence() {
-        var from = dayMonthHour(2, 1, 0);
-        var to = dayMonthHour(4, 3, 23);
+        var from = instant(2, 1, 0);
+        var to = instant(4, 3, 23);
 
-        var start = dayMonthHour(1, 1, 9);
-        var end = dayMonthHour(7, 30, 12);
+        var start = instant(1, 1, 9);
+        var end = instant(7, 30, 12);
 
         var rec = recurrence(1, start, end);
         var list = rec.generateOccurrences(from, to);
@@ -127,11 +122,11 @@ public class MonthlyRecurrenceTest {
 
     @Test
     void testWithLastDayOfMonth() {
-        var from = dayMonthHour(2, 1, 0);
-        var to = dayMonthHour(10, 30, 23);
+        var from = instant(2, 1, 0);
+        var to = instant(10, 30, 23);
 
-        var start = dayMonthHour(1, 31, 9);
-        var end = dayMonthHour(5, 1, 12);
+        var start = instant(1, 31, 9);
+        var end = instant(5, 1, 12);
 
         var rec = recurrence(1, start, end);
         var list = rec.generateOccurrences(from, to);
@@ -143,15 +138,11 @@ public class MonthlyRecurrenceTest {
         assertEquals(3, list.size());
     }
 
-    private ZonedDateTime dayMonthHour(int month, int day, int hour) {
-        return ZonedDateTime.of(LocalDateTime.of(2023, month, day, hour, 0), CET);
+    private Instant instant(int month, int day, int hour) {
+        return LocalDateTime.of(2023, month, day, hour, 0).toInstant(ZoneOffset.UTC);
     }
 
-    private MonthlyRecurrence recurrence(int offset, ZonedDateTime start, ZonedDateTime end) {
-        var recurrence = new MonthlyRecurrence();
-        recurrence.start = start;
-        recurrence.offset = offset;
-        recurrence.end =  end;
-        return recurrence;
+    private MonthlyRecurrence recurrence(int offset, Instant start, Instant end) {
+        return new MonthlyRecurrence(start, end, ZoneId.of("UTC"), offset);
     }
 }

@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class CalendarService {
     private final DeviationRepo deviationRepo;
     private final AuthenticationProvider authenticationProvider;
 
-    public List<EventDto> getEvents(ZonedDateTime from, ZonedDateTime to) {
+    public List<EventDto> getEvents(Instant from, Instant to) {
         var user = authenticationProvider.getAuthenticatedUser();
         var events = eventRepo.findEventsByRecurrenceStartBeforeAndRecurrenceEndAfterAndUser(to, from, user);
         return events.stream().map(e -> e.getEvents(from, to)).flatMap(Collection::stream).toList();
@@ -90,7 +90,7 @@ public class CalendarService {
 
     private Event getSingleEvent(CalendarEventRequest request) {
         var end = request.start.plusSeconds(request.duration);
-        var recurrence = new SingleRecurrence(request.start, end);
+        var recurrence = new SingleRecurrence(request.start, end, request.zoneId);
         return buildEvent(request, recurrence);
     }
 
@@ -98,10 +98,13 @@ public class CalendarService {
         var end = request.end;
 
         if (request.occurrences != null) {
-            end = request.start.plusDays(request.offset * (request.occurrences - 1)).plusSeconds(request.duration);
+            end = request.start.atZone(request.zoneId)
+                    .plusDays(request.offset * (request.occurrences - 1))
+                    .plusSeconds(request.duration)
+                    .toInstant();
         }
 
-        var recurrence = new DailyRecurrence(request.start, end, request.offset);
+        var recurrence = new DailyRecurrence(request.start, end, request.zoneId, request.offset);
         return buildEvent(request, recurrence);
     }
 
@@ -112,12 +115,13 @@ public class CalendarService {
         // it depends on which day of the week we start the recurrence and how many occurrences are requested
         // this makes the calculation of the end date a lot more complicated than other recurrence types
         if (request.occurrences != null) {
+            var start = request.start.atZone(request.zoneId);
             // the event start moved to the monday of the week
-            var weekStart = request.start.with(previousOrSame(DayOfWeek.MONDAY));
+            var weekStart = start.with(previousOrSame(DayOfWeek.MONDAY));
 
             // the amount of event occurrences we "skipped" e.g. if we have occurrences on Mon, Tue and Fri
             // and our start date is a Fri, we skipped 2 days (Mon, Tue)
-            int skipped = (int) request.weekDays.stream().filter(weekDay -> weekDay.compareTo(request.start.getDayOfWeek()) < 0).count();
+            int skipped = (int) request.weekDays.stream().filter(weekDay -> weekDay.compareTo(start.getDayOfWeek()) < 0).count();
 
             // added to the weekStart date we get the monday in the week the end date will be in
             // if we have an offset we need to add additional "empty" weeks in between the weeks which contain the events
@@ -128,10 +132,10 @@ public class CalendarService {
             // putting together the weekDate and the weekDay gives us the last occurrence
             int lastIndex = (request.occurrences + skipped - 1) % request.weekDays.size();
             DayOfWeek lastDay = (DayOfWeek) request.weekDays.toArray()[lastIndex];
-            end = weekStart.plusWeeks(weeksToAdd).with(nextOrSame(lastDay)).plusSeconds(request.duration);
+            end = weekStart.plusWeeks(weeksToAdd).with(nextOrSame(lastDay)).plusSeconds(request.duration).toInstant();
         }
 
-        var recurrence = new WeeklyRecurrence(request.start, end, request.offset, request.weekDays);
+        var recurrence = new WeeklyRecurrence(request.start, end, request.zoneId, request.offset, request.weekDays);
         return buildEvent(request, recurrence);
     }
 
@@ -139,10 +143,13 @@ public class CalendarService {
         var end = request.end;
 
         if (request.occurrences != null) {
-            end = request.start.plusMonths(request.offset * (request.occurrences - 1)).plusSeconds(request.duration);
+            end = request.start.atZone(request.zoneId)
+                    .plusMonths(request.offset * (request.occurrences - 1))
+                    .plusSeconds(request.duration)
+                    .toInstant();
         }
 
-        var recurrence = new MonthlyRecurrence(request.start, end, request.offset);
+        var recurrence = new MonthlyRecurrence(request.start, end, request.zoneId, request.offset);
         return buildEvent(request, recurrence);
     }
 
@@ -150,10 +157,13 @@ public class CalendarService {
         var end = request.end;
 
         if (request.occurrences != null) {
-            end = request.start.plusYears(request.offset * (request.occurrences - 1)).plusSeconds(request.duration);
+            end = request.start.atZone(request.zoneId)
+                    .plusYears(request.offset * (request.occurrences - 1))
+                    .plusSeconds(request.duration)
+                    .toInstant();
         }
 
-        var recurrence = new YearlyRecurrence(request.start, end, request.offset);
+        var recurrence = new YearlyRecurrence(request.start, end, request.zoneId, request.offset);
         return buildEvent(request, recurrence);
     }
 

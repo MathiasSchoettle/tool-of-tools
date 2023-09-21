@@ -4,22 +4,17 @@ import de.mscho.toftws.calendar.entity.recurrence.SingleRecurrence;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Tag("unit")
 public class SingleRecurrenceTest {
-    private static final ZoneId CET = ZoneId.of("CET");
-
     @Test
     void testInTimeFrame() {
-        var start = dayMonthHour(1, 17, 5);
-        var from = dayMonthHour(1, 6, 0);
-        var to = dayMonthHour(2, 22, 0);
+        var start = instant(1, 17, 5);
+        var from = instant(1, 6, 0);
+        var to = instant(2, 22, 0);
 
         var recurrence = recurrence(start);
         var occurrences = recurrence.generateOccurrences(from, to);
@@ -30,9 +25,9 @@ public class SingleRecurrenceTest {
 
     @Test
     void testOutsideOfTimeFrame() {
-        var start = dayMonthHour(3, 17, 5);
-        var from = dayMonthHour(1, 6, 0);
-        var to = dayMonthHour(2, 22, 0);
+        var start = instant(3, 17, 5);
+        var from = instant(1, 6, 0);
+        var to = instant(2, 22, 0);
 
         var recurrence = recurrence(start);
         var occurrences = recurrence.generateOccurrences(from, to);
@@ -40,13 +35,11 @@ public class SingleRecurrenceTest {
         assertEquals(0, occurrences.size());
     }
 
-    private ZonedDateTime dayMonthHour(int month, int day, int hour) {
-        return ZonedDateTime.of(LocalDateTime.of(2023, month, day, hour, 0), CET);
+    private Instant instant(int month, int day, int hour) {
+        return LocalDateTime.of(2023, month, day, hour, 0).toInstant(ZoneOffset.UTC);
     }
 
-    private SingleRecurrence recurrence(ZonedDateTime start) {
-        var recurrence = new SingleRecurrence();
-        recurrence.start = start;
-        return recurrence;
+    private SingleRecurrence recurrence(Instant start) {
+        return new SingleRecurrence(start, start, ZoneId.of("UTC"));
     }
 }
