@@ -18,12 +18,11 @@ public class DaySetConverters {
     /**
      * Will filter out invalid values
      */
-    public static class DaySetConverter extends StdConverter<String, SortedSet<DayOfWeek>> {
+    public static class DaySetConverter extends StdConverter<List<String>, SortedSet<DayOfWeek>> {
         @Override
-        public SortedSet<DayOfWeek> convert(String s) {
-            List<String> dayNames = Arrays.stream(s.split(",")).toList();
+        public SortedSet<DayOfWeek> convert(List<String> s) {
             return Arrays.stream(DayOfWeek.values())
-                    .filter(dayOfWeek -> dayNames.contains(dayOfWeek.name()))
+                    .filter(dayOfWeek -> s.contains(dayOfWeek.name()))
                     .collect(Collectors.toCollection(TreeSet::new));
         }
     }
