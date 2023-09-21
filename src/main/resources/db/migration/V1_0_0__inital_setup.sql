@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS recurrence
     dtype     VARCHAR(256),
     start     DATETIME,
     end       DATETIME,
+    zone_id   varchar(64),
     offset    INT,
     week_days VARCHAR(256)
 );
@@ -49,7 +50,6 @@ CREATE TABLE IF NOT EXISTS event
     created       DATETIME NOT NULL,
     duration      INT,
     full_day      BIT,
-    zone_id       varchar(64),
     content_id    INT,
     category_id   INT,
     recurrence_id INT,
