@@ -1,6 +1,6 @@
 package de.mscho.toftws.calendar.entity.util;
 
-import de.mscho.toftws.calendar.entity.payload.CalendarEventRequest;
+import de.mscho.toftws.calendar.entity.payload.EventRequest;
 import de.mscho.toftws.calendar.service.CategoryService;
 import de.mscho.toftws.utils.DateTimeUtils;
 import jakarta.validation.ConstraintValidator;
@@ -22,7 +22,7 @@ import static de.mscho.toftws.utils.DateTimeUtils.isInstantAtMidnight;
 
 @RequiredArgsConstructor
 @Component
-public class EventRequestValidator implements ConstraintValidator<EventRequestValidator.Constraint, CalendarEventRequest> {
+public class EventRequestValidator implements ConstraintValidator<EventRequestValidator.Constraint, EventRequest> {
 
     private final CategoryService categoryService;
     private final String NOT_NECESSARY = "not necessary";
@@ -37,7 +37,7 @@ public class EventRequestValidator implements ConstraintValidator<EventRequestVa
      * Validation of Request fields depends on the recurrence type
      */
     @Override
-    public boolean isValid(CalendarEventRequest request, ConstraintValidatorContext context) {
+    public boolean isValid(EventRequest request, ConstraintValidatorContext context) {
         var errors = switch (request.type) {
             case SINGLE -> validateSingle(request);
             case DAILY, MONTHLY, YEARLY -> validateDefaultRecurrence(request);
@@ -69,7 +69,7 @@ public class EventRequestValidator implements ConstraintValidator<EventRequestVa
         }
     }
 
-    private Map<String, String> validateSingle(CalendarEventRequest request) {
+    private Map<String, String> validateSingle(EventRequest request) {
         var errors = new HashMap<String, String>();
 
         if (request.end != null) errors.put("end", NOT_NECESSARY);
@@ -80,7 +80,7 @@ public class EventRequestValidator implements ConstraintValidator<EventRequestVa
         return errors;
     }
 
-    private Map<String, String> validateDefaultRecurrence(CalendarEventRequest request) {
+    private Map<String, String> validateDefaultRecurrence(EventRequest request) {
         var errors = validateDatesOrOccurrence(request);
 
         if (request.offset == null) errors.put("offset", REQUIRED);
@@ -89,7 +89,7 @@ public class EventRequestValidator implements ConstraintValidator<EventRequestVa
         return errors;
     }
 
-    private Map<String, String> validateWeekly(CalendarEventRequest request) {
+    private Map<String, String> validateWeekly(EventRequest request) {
         var errors = validateDatesOrOccurrence(request);
 
         if (request.offset == null) errors.put("offset", REQUIRED);
@@ -103,7 +103,7 @@ public class EventRequestValidator implements ConstraintValidator<EventRequestVa
         return errors;
     }
 
-    private Map<String, String> validateDatesOrOccurrence(CalendarEventRequest request) {
+    private Map<String, String> validateDatesOrOccurrence(EventRequest request) {
         var errors = new HashMap<String, String>();
 
         if (request.end != null && request.occurrences != null)

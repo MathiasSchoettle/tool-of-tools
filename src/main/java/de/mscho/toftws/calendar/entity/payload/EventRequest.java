@@ -12,7 +12,7 @@ import java.time.*;
 import java.util.SortedSet;
 
 @EventRequestValidator.Constraint
-public class CalendarEventRequest {
+public class EventRequest {
     @NotNull
     public RecurrenceType type;
     @NotNull
@@ -35,7 +35,7 @@ public class CalendarEventRequest {
     public EventContentDto content;
     public Long categoryId;
 
-    public CalendarEventRequest(RecurrenceType type, Instant start, Instant end, ZoneId zoneId, Long duration, Long offset, Integer occurrences, EventContentDto content, Long categoryId) {
+    public EventRequest(RecurrenceType type, Instant start, Instant end, ZoneId zoneId, Long duration, Long offset, Integer occurrences, EventContentDto content, Long categoryId) {
         this.type = type;
         this.start = start;
         this.end = end;

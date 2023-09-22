@@ -1,7 +1,7 @@
 package de.mscho.toftws.calendar.service;
 
 import de.mscho.toftws.calendar.entity.Event;
-import de.mscho.toftws.calendar.entity.payload.CalendarEventRequest;
+import de.mscho.toftws.calendar.entity.payload.EventRequest;
 import de.mscho.toftws.calendar.entity.recurrence.*;
 import de.mscho.toftws.calendar.repository.DeviationRepo;
 import de.mscho.toftws.calendar.repository.EventContentRepo;
@@ -26,7 +26,7 @@ public class EventService {
     private final DeviationRepo deviationRepo;
     private final AuthenticationProvider authenticationProvider;
 
-    public Event getEventFromRequest(CalendarEventRequest request) {
+    public Event getEventFromRequest(EventRequest request) {
         return switch (request.type) {
             case SINGLE -> getSingleEvent(request);
             case DAILY -> getDailyEvent(request);
@@ -36,13 +36,13 @@ public class EventService {
         };
     }
 
-    private Event getSingleEvent(CalendarEventRequest request) {
+    private Event getSingleEvent(EventRequest request) {
         var end = request.start.plusSeconds(request.duration);
         var recurrence = new SingleRecurrence(request.start, end, request.zoneId);
         return buildEvent(request, recurrence);
     }
 
-    private Event getDailyEvent(CalendarEventRequest request) {
+    private Event getDailyEvent(EventRequest request) {
         var end = request.end;
 
         if (request.occurrences != null) {
@@ -56,7 +56,7 @@ public class EventService {
         return buildEvent(request, recurrence);
     }
 
-    private Event getWeeklyEvent(CalendarEventRequest request) {
+    private Event getWeeklyEvent(EventRequest request) {
         var end = request.end;
 
         // weekly recurrences are tricky when it comes to the occurrence count
@@ -87,7 +87,7 @@ public class EventService {
         return buildEvent(request, recurrence);
     }
 
-    private Event getMonthlyEvent(CalendarEventRequest request) {
+    private Event getMonthlyEvent(EventRequest request) {
         var end = request.end;
 
         if (request.occurrences != null) {
@@ -101,7 +101,7 @@ public class EventService {
         return buildEvent(request, recurrence);
     }
 
-    private Event getYearlyEvent(CalendarEventRequest request) {
+    private Event getYearlyEvent(EventRequest request) {
         var end = request.end;
 
         if (request.occurrences != null) {
@@ -115,7 +115,7 @@ public class EventService {
         return buildEvent(request, recurrence);
     }
 
-    private Event buildEvent(CalendarEventRequest request, Recurrence recurrence) {
+    private Event buildEvent(EventRequest request, Recurrence recurrence) {
         var event = new Event();
         event.content = request.content.toEntity();
         event.duration = request.duration;

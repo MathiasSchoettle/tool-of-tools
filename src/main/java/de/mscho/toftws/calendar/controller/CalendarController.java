@@ -27,12 +27,12 @@ public class CalendarController {
     }
 
     @PostMapping
-    public void createEvent(@RequestBody @Valid CalendarEventRequest request) {
+    public void createEvent(@RequestBody @Valid EventRequest request) {
         calendarService.createEvent(request);
     }
 
     @PutMapping
-    public void editEvent(@RequestParam long eventId, @RequestBody @Valid CalendarEventRequest request) {
+    public void editEvent(@RequestParam long eventId, @RequestBody @Valid EventRequest request) {
         calendarService.editEvent(eventId, request);
     }
 }

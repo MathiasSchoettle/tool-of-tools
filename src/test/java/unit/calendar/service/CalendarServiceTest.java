@@ -1,6 +1,6 @@
 package unit.calendar.service;
 
-import de.mscho.toftws.calendar.entity.payload.CalendarEventRequest;
+import de.mscho.toftws.calendar.entity.payload.EventRequest;
 import de.mscho.toftws.calendar.entity.payload.EventContentDto;
 import de.mscho.toftws.calendar.entity.payload.RecurrenceType;
 import de.mscho.toftws.calendar.entity.recurrence.*;
@@ -36,8 +36,8 @@ public class CalendarServiceTest {
 
     static ZoneId GERMAN_ZONE = ZoneId.of("Europe/Berlin");
 
-    CalendarEventRequest create(RecurrenceType type, Instant start, Instant end, ZoneId zoneId, Integer duration, Integer offset, Integer occurrences) {
-        return new CalendarEventRequest(
+    EventRequest create(RecurrenceType type, Instant start, Instant end, ZoneId zoneId, Integer duration, Integer offset, Integer occurrences) {
+        return new EventRequest(
                 type,
                 start,
                 end,

@@ -1,7 +1,7 @@
 package de.mscho.toftws.calendar.service;
 
 import de.mscho.toftws.configuration.security.AuthenticationProvider;
-import de.mscho.toftws.calendar.entity.payload.CalendarEventRequest;
+import de.mscho.toftws.calendar.entity.payload.EventRequest;
 import de.mscho.toftws.calendar.entity.payload.EventDto;
 import de.mscho.toftws.calendar.repository.EventRepo;
 import jakarta.transaction.Transactional;
@@ -38,7 +38,7 @@ public class CalendarService {
         return eventDtos;
     }
 
-    public void createEvent(CalendarEventRequest request) {
+    public void createEvent(EventRequest request) {
         var event = eventService.getEventFromRequest(request);
         event = eventRepo.save(event);
         logger.info("created event(id:{})", event.id);
@@ -51,7 +51,7 @@ public class CalendarService {
         if (deleted > 0) logger.info("Deleted Event. id:{}", eventId);
     }
 
-    public void editEvent(long eventId, CalendarEventRequest request) {
+    public void editEvent(long eventId, EventRequest request) {
         var user = authenticationProvider.getAuthenticatedUser();
         var eventOptional = eventRepo.findByIdAndUser(eventId, user);
 
