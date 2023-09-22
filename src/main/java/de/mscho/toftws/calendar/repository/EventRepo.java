@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface EventRepo extends JpaRepository<Event, Long> {
     Optional<Event> findByIdAndUser(long id, User user);
-    List<Event> findEventsByRecurrenceStartBeforeAndRecurrenceEndAfterAndUser(Instant to, Instant from, User user);
+    List<Event> findEventsByRecurrenceEndAfterAndRecurrenceStartBeforeAndUser(Instant from, Instant to, User user);
     List<Event> findEventsByCategoryIdAndUser(long categoryId, User user);
     long deleteByIdAndUser(long id, User user);
 }

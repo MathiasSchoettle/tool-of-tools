@@ -35,13 +35,14 @@ public class EventDto {
         return eventDto.fillContentAndCategory(event.content, event.category);
     }
 
-    public static EventDto buildForDeviation(long eventId, EventDeviation deviation, EventContent content, EventCategory category) {
+    public static EventDto buildForDeviation(EventDeviation deviation) {
         var eventDto = new EventDto();
-        eventDto.id = eventId;
+        eventDto.id = deviation.event.id;
         eventDto.start = deviation.newOccurrence.atZone(DateTimeUtils.UTC);
         eventDto.duration = deviation.duration;
         eventDto.deviationId = deviation.id;
-        return eventDto.fillContentAndCategory(content, category);
+        var content = deviation.content == null ? deviation.event.content : deviation.content;
+        return eventDto.fillContentAndCategory(content, deviation.event.category);
     }
 
     private EventDto fillContentAndCategory(EventContent content, EventCategory category) {

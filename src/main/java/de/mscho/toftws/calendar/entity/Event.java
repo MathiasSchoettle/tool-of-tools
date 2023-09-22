@@ -45,30 +45,13 @@ public class Event extends AbstractTimedEntity {
         return events;
     }
 
-    /**
-     * Build an eventDto. Deviations of events are handled here.
-     * If the deviation was cancelled this returns an empty optional.
-     */
     private Optional<EventDto> buildEvent(ZonedDateTime current) {
-        EventDto event;
         var deviationOptional = deviations.stream().
                 filter(d -> d.oldOccurrence.atZone(recurrence.zoneId).isEqual(current)).findFirst();
 
-        if (deviationOptional.isPresent()) {
-            var deviation = deviationOptional.get();
-            if (deviation.cancelled) {
-                return Optional.empty();
-            }
+        if (deviationOptional.isPresent()) return Optional.empty();
 
-            // use base event content if deviation's content is empty
-            var content = deviation.content == null ? this.content : deviation.content;
-            event = EventDto.buildForDeviation(id, deviation, content, category);
-        }
-        else {
-            event = EventDto.buildForEvent(current, this);
-        }
-
-        return Optional.of(event);
+        return Optional.ofNullable(EventDto.buildForEvent(current, this));
     }
 
     public void fill(Event event) {

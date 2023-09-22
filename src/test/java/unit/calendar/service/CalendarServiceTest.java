@@ -4,8 +4,8 @@ import de.mscho.toftws.calendar.entity.payload.CalendarEventRequest;
 import de.mscho.toftws.calendar.entity.payload.EventContentDto;
 import de.mscho.toftws.calendar.entity.payload.RecurrenceType;
 import de.mscho.toftws.calendar.entity.recurrence.*;
-import de.mscho.toftws.calendar.service.CalendarService;
 import de.mscho.toftws.calendar.service.CategoryService;
+import de.mscho.toftws.calendar.service.EventService;
 import de.mscho.toftws.configuration.security.AuthenticationProvider;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ public class CalendarServiceTest {
     @Mock
     AuthenticationProvider authenticationProvider;
     @InjectMocks
-    CalendarService service;
+    EventService service;
 
     static ZoneId GERMAN_ZONE = ZoneId.of("Europe/Berlin");
 

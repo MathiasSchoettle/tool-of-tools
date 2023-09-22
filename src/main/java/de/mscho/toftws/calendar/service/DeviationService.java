@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -20,6 +23,11 @@ public class DeviationService {
     private final EventRepo eventRepo;
     private final EventContentRepo contentRepo;
     private final AuthenticationProvider authenticationProvider;
+
+    public List<EventDeviation> getDeviations(Instant from, Instant to) {
+        var user = authenticationProvider.getAuthenticatedUser();
+        return deviationRepo.findEventDeviationByNewOccurrenceAfterAndNewOccurrenceBeforeAndEventUser(from, to, user);
+    }
 
     public void createDeviation(long eventId, DeviationRequest deviationDto) {
         var user = authenticationProvider.getAuthenticatedUser();
