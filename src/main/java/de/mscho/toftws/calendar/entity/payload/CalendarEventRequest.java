@@ -33,7 +33,6 @@ public class CalendarEventRequest {
     @NotNull
     @Valid
     public EventContentDto content;
-    @NotNull
     public Long categoryId;
 
     public CalendarEventRequest(RecurrenceType type, Instant start, Instant end, ZoneId zoneId, Long duration, Long offset, Integer occurrences, EventContentDto content, Long categoryId) {

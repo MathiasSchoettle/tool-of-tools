@@ -44,10 +44,8 @@ public class EventRequestValidator implements ConstraintValidator<EventRequestVa
             case WEEKLY -> validateWeekly(request);
         };
 
-        if (!categoryService.categoryExists(request.categoryId)) {
-            String NOT_FOUND = "not found";
-            errors.put("categoryId", NOT_FOUND);
-        }
+        if (request.categoryId != null && !categoryService.categoryExists(request.categoryId))
+            errors.put("categoryId", "not found");
 
         if (request.fullDay) {
             if (request.end != null && !isInstantAtMidnight(request.end)) errors.put("end", "must be at start of day");
