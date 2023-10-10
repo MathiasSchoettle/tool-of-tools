@@ -1,0 +1,14 @@
+services:
+  database:
+    container_name: toft_db_local
+    image: 'mysql:latest'
+    volumes:
+      - toft-data-local:/home/app/data
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: toft
+
+volumes:
+  toft-data-local:

@@ -1,14 +1,28 @@
+version: "3.8"
+
 services:
-  database:
-    container_name: toft_db_local
-    image: 'mysql:latest'
-    volumes:
-      - toft-data-local:/home/app/data
+  app:
+    container_name: toft_app
+    pull_policy: always
+    image: ghcr.io/mathiasschoettle/tool-of-tools:main
     ports:
-      - '3306:3306'
+      - "8080:8080"
+    environment:
+      MYSQL_HOST: mysql
+      SQL_USERNAME: root
+      SQL_PASSWORD: root
+      SQL_SCHEMA: toft
+
+  mysql:
+    container_name: toft_db
+    image: 'mysql:latest'
+    ports:
+      - "3306:3306"
+    volumes:
+      - toft-mysql-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: toft
 
 volumes:
-  toft-data-local:
+  toft-mysql-data:
