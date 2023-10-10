@@ -4,7 +4,7 @@ services:
   app:
     container_name: toft_app
     pull_policy: always
-    image: ghcr.io/mathiasschoettle/tooloftools:main
+    image: ghcr.io/mathiasschoettle/tool-of-tools:main
     ports:
       - "8080:8080"
     environment:
