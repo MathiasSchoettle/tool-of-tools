@@ -6,7 +6,7 @@ import de.mscho.toftws.calendar.entity.recurrence.*;
 import de.mscho.toftws.calendar.repository.DeviationRepo;
 import de.mscho.toftws.calendar.repository.EventContentRepo;
 import de.mscho.toftws.calendar.repository.RecurrenceRepo;
-import de.mscho.toftws.configuration.security.AuthenticationProvider;
+import de.mscho.toftws.configuration.security.AuthenticatedUserProvider;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class EventService {
     private final EventContentRepo contentRepo;
     private final RecurrenceRepo recurrenceRepo;
     private final DeviationRepo deviationRepo;
-    private final AuthenticationProvider authenticationProvider;
+    private final AuthenticatedUserProvider authenticationProvider;
 
     public Event getEventFromRequest(EventRequest request) {
         return switch (request.type) {

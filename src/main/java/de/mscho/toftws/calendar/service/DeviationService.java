@@ -1,6 +1,6 @@
 package de.mscho.toftws.calendar.service;
 
-import de.mscho.toftws.configuration.security.AuthenticationProvider;
+import de.mscho.toftws.configuration.security.AuthenticatedUserProvider;
 import de.mscho.toftws.calendar.entity.EventDeviation;
 import de.mscho.toftws.calendar.entity.payload.DeviationRequest;
 import de.mscho.toftws.calendar.repository.DeviationRepo;
@@ -22,7 +22,7 @@ public class DeviationService {
     private final DeviationRepo deviationRepo;
     private final EventRepo eventRepo;
     private final EventContentRepo contentRepo;
-    private final AuthenticationProvider authenticationProvider;
+    private final AuthenticatedUserProvider authenticationProvider;
 
     public List<EventDeviation> getDeviations(Instant from, Instant to) {
         var user = authenticationProvider.getAuthenticatedUser();

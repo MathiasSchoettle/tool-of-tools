@@ -1,6 +1,6 @@
 package de.mscho.toftws.calendar.service;
 
-import de.mscho.toftws.configuration.security.AuthenticationProvider;
+import de.mscho.toftws.configuration.security.AuthenticatedUserProvider;
 import de.mscho.toftws.calendar.entity.EventCategory;
 import de.mscho.toftws.calendar.repository.CategoryRepo;
 import de.mscho.toftws.calendar.repository.EventRepo;
@@ -18,7 +18,7 @@ public class CategoryService {
     private final Logger logger;
     private final CategoryRepo categoryRepo;
     private final EventRepo eventRepo;
-    private final AuthenticationProvider authenticationProvider;
+    private final AuthenticatedUserProvider authenticationProvider;
 
     public Optional<EventCategory> getCategory(Long categoryId) {
         var user = authenticationProvider.getAuthenticatedUser();

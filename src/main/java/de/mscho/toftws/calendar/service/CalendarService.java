@@ -1,6 +1,6 @@
 package de.mscho.toftws.calendar.service;
 
-import de.mscho.toftws.configuration.security.AuthenticationProvider;
+import de.mscho.toftws.configuration.security.AuthenticatedUserProvider;
 import de.mscho.toftws.calendar.entity.payload.EventRequest;
 import de.mscho.toftws.calendar.entity.payload.EventDto;
 import de.mscho.toftws.calendar.repository.EventRepo;
@@ -22,7 +22,7 @@ public class CalendarService {
     private final EventService eventService;
     private final DeviationService deviationService;
     private final EventRepo eventRepo;
-    private final AuthenticationProvider authenticationProvider;
+    private final AuthenticatedUserProvider authenticationProvider;
 
     public List<EventDto> getEvents(Instant from, Instant to) {
         var user = authenticationProvider.getAuthenticatedUser();

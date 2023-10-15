@@ -6,7 +6,7 @@ import de.mscho.toftws.calendar.entity.payload.RecurrenceType;
 import de.mscho.toftws.calendar.entity.recurrence.*;
 import de.mscho.toftws.calendar.service.CategoryService;
 import de.mscho.toftws.calendar.service.EventService;
-import de.mscho.toftws.configuration.security.AuthenticationProvider;
+import de.mscho.toftws.configuration.security.AuthenticatedUserProvider;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +30,7 @@ public class CalendarServiceTest {
     @Mock
     CategoryService categoryService;
     @Mock
-    AuthenticationProvider authenticationProvider;
+    AuthenticatedUserProvider authenticationProvider;
     @InjectMocks
     EventService service;
 
