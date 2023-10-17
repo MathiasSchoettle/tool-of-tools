@@ -21,9 +21,7 @@ public class DaySetConverters {
     public static class DaySetConverter extends StdConverter<List<String>, SortedSet<DayOfWeek>> {
         @Override
         public SortedSet<DayOfWeek> convert(List<String> s) {
-            return Arrays.stream(DayOfWeek.values())
-                    .filter(dayOfWeek -> s.contains(dayOfWeek.name()))
-                    .collect(Collectors.toCollection(TreeSet::new));
+            return s.stream().map(DayOfWeek::valueOf).collect(Collectors.toCollection(TreeSet::new));
         }
     }
 
