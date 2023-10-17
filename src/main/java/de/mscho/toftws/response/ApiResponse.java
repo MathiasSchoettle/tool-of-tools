@@ -12,6 +12,9 @@ public record ApiResponse(
     public static ApiResponse success(Object data) {
         return new ApiResponse("success", null, data);
     }
+    public static ApiResponse success() {
+        return new ApiResponse("success", null, null);
+    }
     public static ApiResponse fail(Object data) {
         return new ApiResponse("fail", null, data);
     }
