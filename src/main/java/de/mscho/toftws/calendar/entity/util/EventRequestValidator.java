@@ -20,8 +20,8 @@ import java.util.Map;
 import static de.mscho.toftws.utils.DateTimeUtils.areUTCDay;
 import static de.mscho.toftws.utils.DateTimeUtils.isInstantAtMidnight;
 
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class EventRequestValidator implements ConstraintValidator<EventRequestValidator.Constraint, EventRequest> {
 
     private final CategoryService categoryService;
