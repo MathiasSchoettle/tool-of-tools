@@ -1,15 +1,13 @@
-package unit.calendar.entity.recurrence;
+package de.mscho.toftws.unit.calendar.entity.recurrence;
 
 
 import de.mscho.toftws.calendar.entity.recurrence.YearlyRecurrence;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.time.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Tag("unit")
 public class YearlyRecurrenceTest {
     @Test
     void testInTimeframe() {

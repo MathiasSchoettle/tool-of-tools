@@ -1,4 +1,4 @@
-package unit.calendar.service;
+package de.mscho.toftws.unit.calendar.service;
 
 import de.mscho.toftws.calendar.entity.payload.EventRequest;
 import de.mscho.toftws.calendar.entity.payload.EventContentDto;
@@ -7,7 +7,6 @@ import de.mscho.toftws.calendar.entity.recurrence.*;
 import de.mscho.toftws.calendar.service.CategoryService;
 import de.mscho.toftws.calendar.service.EventService;
 import de.mscho.toftws.configuration.security.AuthenticatedUserProvider;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SuppressWarnings("unused")
-@Tag("unit")
 @ExtendWith(MockitoExtension.class)
 public class CalendarServiceTest {
     @Mock
