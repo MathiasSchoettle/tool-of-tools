@@ -4,11 +4,13 @@ import de.mscho.toftws.configuration.security.AuthenticatedUserProvider;
 import de.mscho.toftws.calendar.entity.EventCategory;
 import de.mscho.toftws.calendar.repository.CategoryRepo;
 import de.mscho.toftws.calendar.repository.EventRepo;
+import de.mscho.toftws.user.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,6 +21,10 @@ public class CategoryService {
     private final CategoryRepo categoryRepo;
     private final EventRepo eventRepo;
     private final AuthenticatedUserProvider authenticationProvider;
+
+    public List<EventCategory> getCategories(User user) {
+        return categoryRepo.findByUser(user);
+    }
 
     public Optional<EventCategory> getCategory(Long categoryId) {
         var user = authenticationProvider.getAuthenticatedUser();
