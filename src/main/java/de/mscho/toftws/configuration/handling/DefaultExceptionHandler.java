@@ -3,14 +3,13 @@ package de.mscho.toftws.configuration.handling;
 import de.mscho.toftws.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice
-@Order
+@RestControllerAdvice(annotations = RestController.class)
 @RequiredArgsConstructor
 public class DefaultExceptionHandler {
 
