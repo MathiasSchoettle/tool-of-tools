@@ -15,4 +15,8 @@ public class UserService {
     public Optional<User> getByAuthToken(String authToken) {
         return userRepo.findByAuthToken(authToken);
     }
+
+    public Optional<User> getByUsername(String username) {
+        return userRepo.findByUsername(username);
+    }
 }
