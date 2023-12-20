@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+</head>
+<body>
+
+<main class="container">
+    <article class="grid">
+        <div>
+            <hgroup>
+                <h1>Sign in</h1>
+            </hgroup>
+
+            <form th:action="@{/login}" method="post">
+                <input type="text" name="username" placeholder="Login" aria-label="Login" autocomplete="nickname" required/>
+                <input type="password" name="password" placeholder="Password" aria-label="Password" autocomplete="current-password" required/>
+                <button type="submit" class="contrast">Login</button>
+            </form>
+        </div>
+    </article>
+</main>
+
+</body>
+</html>
