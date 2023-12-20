@@ -28,7 +28,7 @@ public class ApiAuthenticationFilter extends AuthenticationFilter {
     }
 
     private static AuthenticationFailureHandler failureHandler() {
-        return (request, response, exception) -> {
+        return (_, response, exception) -> {
             response.setStatus(HttpStatus.FORBIDDEN.value());
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.setContentType("text/plain;charset=utf8");
@@ -37,7 +37,7 @@ public class ApiAuthenticationFilter extends AuthenticationFilter {
     }
 
     private static AuthenticationSuccessHandler successHandler() {
-        return (request, response, authentication) -> {
+        return (_, _, _) -> {
             // noop
         };
     }
