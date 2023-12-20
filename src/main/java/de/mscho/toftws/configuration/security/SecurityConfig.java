@@ -14,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
+import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 @Configuration
@@ -25,7 +26,6 @@ public class SecurityConfig implements WebMvcConfigurer {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         return http
                 .authorizeHttpRequests(
                         authorizeHttp -> authorizeHttp
@@ -35,6 +35,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                                 .anyRequest().authenticated()
                 )
                 .apply(new ApiConfigurer(userService)).and()
+                .with(new ApiConfigurer(userService), withDefaults())
                 .csrf(configurer -> configurer.ignoringRequestMatchers(antMatcher("/calendar/**")))
                 .cors(configurer -> configurer.configurationSource(corsConfigurationSource()))
                 .build();
