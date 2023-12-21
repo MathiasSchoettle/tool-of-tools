@@ -35,7 +35,10 @@ public class SecurityConfig implements WebMvcConfigurer {
                                 .requestMatchers(antMatcher("/error")).permitAll()
                                 .anyRequest().authenticated()
                 )
-                .formLogin(form -> form.loginPage("/login").permitAll())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/home", true)
+                        .permitAll())
                 .logout(withDefaults())
                 .with(new ApiConfigurer(userService), withDefaults())
                 .csrf(configurer -> configurer.ignoringRequestMatchers(antMatcher("/calendar/**")))
