@@ -1,18 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <title>Error</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link th:replace="~{fragments/bootstrap.html}">
 </head>
 <body>
 
-<main class="container">
-    <article class="grid">
-        <h1>
-            Not found
-        </h1>
-    </article>
+<main class="container vh-100 d-flex align-items-center justify-content-center">
+    <div class="p-5 text-center bg-body-tertiary rounded-3 d-flex flex-column justify-content-between gap-5">
+        <h1 class="text-body-emphasis">An Error occurred</h1>
+
+        <p class="col-md-8 mx-auto fs-5 text-muted">
+            Something went wrong. Please return to the Home Page.
+        </p>
+
+        <div>
+            <a th:href="@{/home}" class="btn btn-primary btn-lg px-4 rounded-pill" type="button">
+                Take me Home
+            </a>
+        </div>
+    </div>
 </main>
 
 </body>

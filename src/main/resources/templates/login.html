@@ -1,26 +1,43 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="en" data-bs-theme="dark">
 <head>
     <title>Login</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link th:replace="~{fragments/bootstrap.html}">
+
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        .form-signin {
+            max-width: 330px;
+            padding: 1rem;
+        }
+    </style>
 </head>
-<body>
+<body class="d-flex align-items-center py-4 bg-body-tertiary">
 
-<main class="container">
-    <article class="grid">
-        <div>
-            <hgroup>
-                <h1>Sign in</h1>
-            </hgroup>
+<main class="form-signin w-100 m-auto">
 
-            <form th:action="@{/login}" method="post">
-                <input type="text" name="username" placeholder="Login" aria-label="Login" autocomplete="nickname" required/>
-                <input type="password" name="password" placeholder="Password" aria-label="Password" autocomplete="current-password" required/>
-                <button type="submit" class="contrast">Login</button>
-            </form>
+    <h1 class="h3 mb-3 fw-normal">Sign in</h1>
+
+    <p th:if="${param.error}" class="text-danger-emphasis">Login failed</p>
+
+    <form th:action="@{/login}" method="post">
+        <div class="form-floating">
+            <input type="text" class="form-control" id="floatingInput" placeholder="username" name="username">
+            <label for="floatingInput">Username</label>
         </div>
-    </article>
+        <div class="form-floating mt-2">
+            <input type="password" class="form-control" id="floatingPassword" placeholder="password" name="password">
+            <label for="floatingPassword">Password</label>
+        </div>
+
+        <button class="btn btn-primary w-100 py-2 mt-4" type="submit">Sign in</button>
+    </form>
 </main>
 
 </body>
+
 </html>
