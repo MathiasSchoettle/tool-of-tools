@@ -1,7 +1,7 @@
 package de.mscho.toftws.calendar.entity.payload;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import de.mscho.toftws.calendar.entity.util.DaySetConverters;
+import de.mscho.toftws.calendar.entity.util.DaySetConverters.DaySetConverter;
 import de.mscho.toftws.calendar.entity.util.EventRequestValidator;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -25,7 +25,7 @@ public class EventRequest {
     public Long duration;
     @Positive
     public Long offset;
-    @JsonDeserialize(converter = DaySetConverters.DaySetConverter.class)
+    @JsonDeserialize(converter = DaySetConverter.class)
     public SortedSet<DayOfWeek> weekDays;
     @Positive
     public Integer occurrences;
