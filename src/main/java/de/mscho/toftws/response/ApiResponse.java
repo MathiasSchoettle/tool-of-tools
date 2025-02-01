@@ -3,22 +3,26 @@ package de.mscho.toftws.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 public record ApiResponse(
-        String status,
+        ApiResponseStatus status,
         @JsonInclude(JsonInclude.Include.NON_NULL)
         String message,
         @JsonInclude(JsonInclude.Include.NON_NULL)
         Object data) {
 
     public static ApiResponse success(Object data) {
-        return new ApiResponse("success", null, data);
+        return new ApiResponse(ApiResponseStatus.SUCCESS, null, data);
     }
     public static ApiResponse success() {
-        return new ApiResponse("success", null, null);
+        return new ApiResponse(ApiResponseStatus.SUCCESS, null, null);
     }
     public static ApiResponse fail(Object data) {
-        return new ApiResponse("fail", null, data);
+        return new ApiResponse(ApiResponseStatus.FAILURE, null, data);
     }
     public static ApiResponse error(String message, Object data) {
-        return new ApiResponse("error", message, data);
+        return new ApiResponse(ApiResponseStatus.ERROR, message, data);
+    }
+
+    private enum ApiResponseStatus {
+        SUCCESS, FAILURE, ERROR
     }
 }
