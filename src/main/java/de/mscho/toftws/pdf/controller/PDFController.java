@@ -1,9 +1,16 @@
 package de.mscho.toftws.pdf.controller;
 
+import de.mscho.toftws.pdf.service.PDFCreationBody;
 import de.mscho.toftws.pdf.service.PDFImageService;
 import de.mscho.toftws.pdf.service.PDFService;
 import de.mscho.toftws.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -34,5 +41,22 @@ public class PDFController {
         return imageService.getImages(id, indices)
                 .map(ApiResponse::success)
                 .orElseGet(() -> ApiResponse.error("Error during image fetching"));
+    }
+
+    @PostMapping("create")
+    public ResponseEntity<? extends Resource> createPDF(@RequestParam UUID id, @RequestParam String name, @RequestBody PDFCreationBody body) {
+        var entries = body.entries();
+
+        return pdfService.createPDF(id, entries).map(data -> {
+            var resource = new ByteArrayResource(data);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .contentLength(resource.contentLength())
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            ContentDisposition.attachment()
+                                    .filename(name + ".pdf")
+                                    .build().toString())
+                    .body(resource);
+        }).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 }
